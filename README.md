@@ -29,10 +29,36 @@ Adaptasi yang diterapkan ke Expo:
   - `@react-navigation/native`
   - `@react-navigation/drawer`
   - `@react-navigation/bottom-tabs`
-  - `@react-navigation/stack`
+  - `@react-navigation/native-stack`
 - `react-native-gesture-handler`
 - `react-native-reanimated`
 - `@expo/vector-icons`
+
+## Audit Dependency
+
+Dependency inti yang dipakai aplikasi:
+
+- `expo`: runtime dan tooling utama Expo SDK 55
+- `@react-navigation/native`: fondasi navigasi
+- `@react-navigation/drawer`: sidebar / drawer utama
+- `@react-navigation/bottom-tabs`: tab pada halaman Beranda
+- `@react-navigation/native-stack`: stack untuk daftar dan detail mata kuliah
+- `react-native-gesture-handler`: gesture drawer dan navigasi
+- `react-native-screens`: optimasi screen native
+- `react-native-safe-area-context`: safe area yang sesuai dan tidak deprecated
+- `react-native-reanimated`: dependensi transitif untuk drawer dan animasi navigator
+- `react-native-worklets`: peer dependency yang dibutuhkan Reanimated di Expo 55
+- `expo-font`: peer dependency untuk `@expo/vector-icons`
+
+Dependency yang dirampingkan:
+
+- `@react-navigation/stack` dihapus
+
+Alasannya:
+
+- `@react-navigation/native-stack` lebih ringan untuk kebutuhan stack sederhana
+- mengurangi jalur asset header JS dari `@react-navigation/stack`
+- lebih cocok dengan stack native pada Expo SDK 55
 
 ## Cara Menjalankan
 
@@ -230,3 +256,32 @@ npx tsc --noEmit
 ```
 
 Keduanya berhasil.
+
+## Troubleshooting Expo 55
+
+### Error `back-icon@3x.png could not be found`
+
+Masalah ini sudah ditangani pada repo ini dengan mengganti `@react-navigation/stack` ke `@react-navigation/native-stack`.
+
+Alasan teknis:
+
+- `@react-navigation/stack` memakai header stack berbasis JavaScript
+- pada kombinasi Metro dan Expo 55, jalur asset header dari `@react-navigation/elements` dapat memicu error resolusi asset
+- `native-stack` lebih ringan dan lebih stabil untuk kebutuhan daftar ke detail pada aplikasi ini
+
+### Warning `Project is incompatible with this version of Expo Go`
+
+Ini bukan bug kode aplikasi. Artinya versi Expo Go pada perangkat Anda lebih lama daripada SDK proyek.
+
+Solusi:
+
+- update Expo Go ke versi terbaru dari Play Store
+- lalu jalankan ulang `npx expo start --clear`
+
+### Warning `SafeAreaView has been deprecated`
+
+Sudah diperbaiki di kode aplikasi dengan memakai `SafeAreaView` dari `react-native-safe-area-context`.
+
+### Warning `InteractionManager has been deprecated`
+
+Warning ini berasal dari dependency internal yang berjalan pada development mode. Selama bundling dan navigasi aplikasi normal, warning ini tidak memblokir aplikasi.

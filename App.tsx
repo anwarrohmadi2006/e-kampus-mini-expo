@@ -12,13 +12,16 @@ import {
   createDrawerNavigator,
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
-import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React, { useLayoutEffect } from 'react';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Image,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -177,7 +180,7 @@ const theme: Theme = {
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 const Tab = createBottomTabNavigator<HomeTabParamList>();
-const CourseStack = createStackNavigator<CourseStackParamList>();
+const CourseStack = createNativeStackNavigator<CourseStackParamList>();
 
 export default function App() {
   return (
@@ -207,6 +210,7 @@ export default function App() {
           component={ScheduleScreen}
           options={{
             title: 'Jadwal Kuliah',
+            headerShown: false,
             drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
           }}
         />
@@ -215,6 +219,7 @@ export default function App() {
           component={AnnouncementsScreen}
           options={{
             title: 'Pengumuman',
+            headerShown: false,
             drawerIcon: ({ color, size }) => <Ionicons name="megaphone-outline" size={size} color={color} />,
           }}
         />
@@ -223,6 +228,7 @@ export default function App() {
           component={AboutCampusScreen}
           options={{
             title: 'Tentang Kampus',
+            headerShown: false,
             drawerIcon: ({ color, size }) => <Ionicons name="school-outline" size={size} color={color} />,
           }}
         />
@@ -235,6 +241,7 @@ function HomeTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: false,
         headerStyle: styles.header,
         headerTintColor: COLORS.primary,
         headerTitleStyle: styles.headerTitle,
@@ -257,7 +264,7 @@ function HomeTabs() {
       <Tab.Screen
         name="MataKuliah"
         component={CourseStackNavigator}
-        options={{ title: 'Mata Kuliah', headerShown: false }}
+        options={{ title: 'Mata Kuliah', tabBarLabel: 'Kuliah' }}
       />
       <Tab.Screen
         name="Nilai"
@@ -267,7 +274,7 @@ function HomeTabs() {
       <Tab.Screen
         name="ProfilMahasiswa"
         component={ProfileScreen}
-        options={{ title: 'Profil Mahasiswa' }}
+        options={{ title: 'Profil Mahasiswa', tabBarLabel: 'Profil' }}
       />
     </Tab.Navigator>
   );
@@ -280,10 +287,14 @@ function CourseStackNavigator() {
         headerStyle: styles.header,
         headerTintColor: COLORS.primary,
         headerTitleStyle: styles.headerTitle,
-        cardStyle: { backgroundColor: COLORS.background },
+        contentStyle: { backgroundColor: COLORS.background },
       }}
     >
-      <CourseStack.Screen name="CourseList" component={CourseListScreen} options={{ title: 'Mata Kuliah' }} />
+      <CourseStack.Screen
+        name="CourseList"
+        component={CourseListScreen}
+        options={{ title: 'Mata Kuliah', headerShown: false }}
+      />
       <CourseStack.Screen name="CourseDetail" component={CourseDetailScreen} options={{ title: 'Detail Mata Kuliah' }} />
     </CourseStack.Navigator>
   );
@@ -336,16 +347,21 @@ function CampusDrawerContent(props: DrawerContentComponentProps) {
   );
 }
 
-function CourseListScreen({ navigation }: { navigation: StackNavigationProp<CourseStackParamList, 'CourseList'> }) {
+function CourseListScreen({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<CourseStackParamList, 'CourseList'>;
+}) {
   const { width } = useWindowDimensions();
   const isWide = width >= 700;
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent} showsVerticalScrollIndicator={false}>
+      <ScreenTopBar title="Mata Kuliah" eyebrow="Beranda" />
       <HeroBanner
-        eyebrow="Academic Year 2023/2024"
+        eyebrow="Semester Ganjil 2023/2024"
         title="Daftar Mata Kuliah"
-        subtitle="Palet navy-gold, permukaan bertingkat, dan kartu akademik mengikuti referensi stitch."
+        subtitle="Pilih mata kuliah untuk melihat dosen pengampu, jadwal, dan bobot SKS."
       />
       <QuickNavigateCard />
       <View style={[styles.courseGrid, isWide && { flexDirection: 'row', flexWrap: 'wrap' }]}>
@@ -364,7 +380,7 @@ function CourseListScreen({ navigation }: { navigation: StackNavigationProp<Cour
               </View>
             </View>
             <Text style={styles.courseTitle}>{course.name}</Text>
-            <Text style={styles.courseSub}>{course.code} • {course.credits} SKS</Text>
+            <Text style={styles.courseSub}>{course.code} | {course.credits} SKS</Text>
             <View style={styles.metaRow}>
               <Ionicons name="time-outline" size={16} color={COLORS.textMuted} />
               <Text style={styles.metaText}>{course.schedule}</Text>
@@ -385,18 +401,20 @@ function CourseListScreen({ navigation }: { navigation: StackNavigationProp<Cour
 }
 
 function QuickNavigateCard() {
-  const navigation = useNavigation<StackNavigationProp<CourseStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<CourseStackParamList>>();
   return (
     <Pressable
       style={styles.quickCard}
       onPress={() => navigation.navigate('CourseDetail', { course: COURSES[0] })}
     >
-      <View>
-        <Text style={styles.quickEyebrow}>Bonus Hook</Text>
-        <Text style={styles.quickTitle}>Buka detail MK dari komponen reusable</Text>
-        <Text style={styles.quickBody}>Komponen ini tidak menerima `navigation` prop langsung dan memakai `useNavigation()`.</Text>
+      <View style={styles.quickCopy}>
+        <Text style={styles.quickEyebrow}>Akses Cepat</Text>
+        <Text style={styles.quickTitle}>Buka mata kuliah unggulan</Text>
+        <Text style={styles.quickBody}>Masuk langsung ke ringkasan mata kuliah pilihan.</Text>
       </View>
-      <Ionicons name="arrow-forward-circle" size={28} color={COLORS.surface} />
+      <View style={styles.quickIconWrap}>
+        <Ionicons name="arrow-forward" size={20} color={COLORS.primary} />
+      </View>
     </Pressable>
   );
 }
@@ -406,7 +424,7 @@ function CourseDetailScreen({
   navigation,
 }: {
   route: RouteProp<CourseStackParamList, 'CourseDetail'>;
-  navigation: StackNavigationProp<CourseStackParamList, 'CourseDetail'>;
+  navigation: NativeStackNavigationProp<CourseStackParamList, 'CourseDetail'>;
 }) {
   const { course } = route.params;
 
@@ -438,6 +456,7 @@ function CourseDetailScreen({
 function GradesScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title="Nilai" eyebrow="Beranda" />
       <HeroBanner
         eyebrow="Academic Performance"
         title="Nilai Semester"
@@ -456,7 +475,7 @@ function GradesScreen() {
         <View key={course.id} style={styles.gradeRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.gradeCourse}>{course.name}</Text>
-            <Text style={styles.gradeMeta}>{course.code} • {course.credits} SKS</Text>
+            <Text style={styles.gradeMeta}>{course.code} | {course.credits} SKS</Text>
           </View>
           <View style={styles.gradePill}>
             <Text style={styles.gradePillText}>{course.grade}</Text>
@@ -470,6 +489,7 @@ function GradesScreen() {
 function ProfileScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title="Profil Mahasiswa" eyebrow="Beranda" />
       <View style={styles.profileHero}>
         <Image source={{ uri: STUDENT.avatar }} style={styles.profileAvatar} />
         <View style={{ flex: 1 }}>
@@ -506,6 +526,7 @@ function ProfileScreen() {
 function ScheduleScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title="Jadwal Kuliah" eyebrow="Sidebar" />
       <HeroBanner
         eyebrow="Week View"
         title="Jadwal Kuliah Mingguan"
@@ -539,6 +560,7 @@ function AnnouncementsScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title="Pengumuman" eyebrow="Sidebar" />
       <HeroBanner
         eyebrow="Campus Updates"
         title="Pengumuman"
@@ -557,6 +579,7 @@ function AnnouncementsScreen() {
 function AboutCampusScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title="Tentang Kampus" eyebrow="Sidebar" />
       <HeroBanner
         eyebrow="Institution Profile"
         title="Tentang Kampus"
@@ -576,12 +599,43 @@ function AboutCampusScreen() {
   );
 }
 
-function HeroBanner({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
+function ScreenTopBar({ title, eyebrow }: { title: string; eyebrow?: string }) {
+  const navigation = useNavigation<any>();
+  const insets = useSafeAreaInsets();
+
+  const openSidebar = () => {
+    let current = navigation;
+
+    while (current) {
+      if (typeof current.openDrawer === 'function') {
+        current.openDrawer();
+        return;
+      }
+
+      current = current.getParent?.();
+    }
+  };
+
+  return (
+    <View style={[styles.topBar, { paddingTop: insets.top + 4 }]}>
+      <Pressable style={styles.topBarButton} onPress={openSidebar}>
+        <Ionicons name="menu" size={22} color={COLORS.primary} />
+      </Pressable>
+      <View style={styles.topBarCopy}>
+        {eyebrow ? <Text style={styles.topBarEyebrow}>{eyebrow}</Text> : null}
+        <Text style={styles.topBarTitle}>{title}</Text>
+      </View>
+      <Image source={{ uri: STUDENT.avatar }} style={styles.topBarAvatar} />
+    </View>
+  );
+}
+
+function HeroBanner({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
   return (
     <View style={styles.hero}>
       <Text style={styles.heroEyebrow}>{eyebrow}</Text>
       <Text style={styles.heroTitle}>{title}</Text>
-      <Text style={styles.heroBody}>{subtitle}</Text>
+      {subtitle ? <Text style={styles.heroBody}>{subtitle}</Text> : null}
     </View>
   );
 }
@@ -624,15 +678,55 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   screenContent: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 14,
     paddingBottom: 120,
-    gap: 18,
+    gap: 16,
+  },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    marginBottom: 2,
+  },
+  topBarButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topBarCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  topBarEyebrow: {
+    color: COLORS.textMuted,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    fontWeight: '700',
+  },
+  topBarTitle: {
+    color: COLORS.primary,
+    fontSize: 28,
+    lineHeight: 32,
+    fontWeight: '800',
+  },
+  topBarAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: COLORS.surface,
   },
   hero: {
     backgroundColor: COLORS.primaryContainer,
-    borderRadius: 28,
-    padding: 24,
-    gap: 10,
+    borderRadius: 26,
+    paddingHorizontal: 22,
+    paddingVertical: 20,
+    gap: 8,
   },
   heroEyebrow: {
     color: COLORS.secondarySoft,
@@ -643,8 +737,8 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     color: COLORS.surface,
-    fontSize: 30,
-    lineHeight: 34,
+    fontSize: 24,
+    lineHeight: 29,
     fontWeight: '800',
   },
   heroBody: {
@@ -722,31 +816,36 @@ const styles = StyleSheet.create({
     left: 12,
     right: 12,
     bottom: 18,
-    height: 72,
+    height: 74,
     borderRadius: 28,
     backgroundColor: 'rgba(249,249,251,0.96)',
     borderTopWidth: 0,
-    paddingBottom: 8,
+    paddingBottom: 10,
     paddingTop: 8,
   },
   tabBarItem: {
-    marginHorizontal: 4,
-    borderRadius: 20,
+    marginHorizontal: 3,
+    marginVertical: 4,
+    borderRadius: 18,
   },
   tabLabel: {
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+    fontSize: 11,
+    letterSpacing: 0.2,
     fontWeight: '700',
   },
   quickCard: {
     backgroundColor: COLORS.primary,
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 22,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
+    gap: 14,
+  },
+  quickCopy: {
+    flex: 1,
+    gap: 5,
   },
   quickEyebrow: {
     color: COLORS.secondarySoft,
@@ -757,16 +856,21 @@ const styles = StyleSheet.create({
   },
   quickTitle: {
     color: COLORS.surface,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '800',
-    marginTop: 6,
   },
   quickBody: {
     color: '#D7DAFF',
-    fontSize: 13,
-    lineHeight: 20,
-    marginTop: 6,
-    maxWidth: '90%',
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  quickIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: COLORS.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   courseGrid: {
     gap: 16,
