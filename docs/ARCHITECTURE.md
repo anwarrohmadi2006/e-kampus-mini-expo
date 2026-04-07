@@ -1,135 +1,187 @@
 # Arsitektur Aplikasi E-Kampus Mini
 
-## 1. Tujuan
+## 1. Tujuan Dokumen
 
-Dokumen ini menjelaskan arsitektur navigasi, struktur layar, sumber data, state UI, dan keputusan implementasi pada aplikasi E-Kampus Mini berbasis Expo SDK 55.
+Dokumen ini menjelaskan arsitektur teknis aplikasi E-Kampus Mini berdasarkan kode yang ada pada proyek saat ini. Fokus utama dokumen mencakup lapisan bootstrap, konfigurasi, navigasi, state, data, komponen bersama, serta perubahan implementasi yang relevan untuk Expo SDK 55.
 
-## 2. Ringkasan Perubahan Arsitektur
+## 2. Ringkasan Arsitektur
 
-Struktur dasar aplikasi tetap menggunakan tiga lapisan navigator, tetapi implementasinya telah diperbarui dibanding versi awal.
+Arsitektur aplikasi dibangun di atas empat lapisan utama:
 
-Perubahan utama:
+1. lapisan bootstrap dan konfigurasi proyek
+2. lapisan navigasi bertingkat
+3. lapisan data dan state UI
+4. lapisan presentasi dan komponen bersama
 
-- layer detail mata kuliah sekarang memakai `Native Stack Navigator`
-- top bar custom dipakai lintas layar agar drawer dan back konsisten
-- akses drawer dapat dilakukan dari semua layar melalui parent navigation
-- avatar profil dibagikan melalui `ProfileAvatarContext`
-- badge tab `Nilai` dikelola sebagai state lokal dan di-reset saat tab difokuskan
-- halaman profil menambahkan alur penggantian foto melalui `expo-image-picker`
+Struktur navigasi utama tetap:
 
-## 3. Hierarki Navigator
+- `Drawer Navigator` sebagai navigasi global
+- `Bottom Tab Navigator` sebagai area fitur utama
+- `Native Stack Navigator` sebagai alur detail mata kuliah
+
+## 3. Lapisan Bootstrap dan Konfigurasi
+
+### 3.1 Entry Point
+
+File [index.ts](../index.ts) menjalankan `registerRootComponent(App)`. Dengan demikian, `App.tsx` menjadi root component baik saat proyek dijalankan di Expo Go maupun pada native build.
+
+### 3.2 Konfigurasi Expo
+
+File [app.json](../app.json) menunjukkan konfigurasi berikut:
+
+- nama dan slug aplikasi: `e-kampus-mini`
+- orientasi: `portrait`
+- tampilan: `light`
+- Android: `predictiveBackGestureEnabled: false`
+- plugin aktif: `expo-font`
+
+Konfigurasi ini konsisten dengan implementasi UI yang berorientasi portrait dan menggunakan ikon berbasis font dari `@expo/vector-icons`.
+
+### 3.3 Konfigurasi Babel
+
+File [babel.config.js](../babel.config.js) menggunakan:
+
+- `babel-preset-expo`
+- `react-native-reanimated/plugin`
+
+Plugin Reanimated wajib ada agar dependency navigasi yang menggunakan Reanimated dapat berjalan benar pada Expo SDK 55.
+
+### 3.4 Konfigurasi TypeScript
+
+File [tsconfig.json](../tsconfig.json) menggunakan:
+
+- `extends: expo/tsconfig.base`
+- `strict: true`
+- `exclude: ["dist", "node_modules"]`
+
+Pendekatan ini menjaga konsistensi tipe tanpa memasukkan folder build hasil ekspor ke dalam pemeriksaan TypeScript.
+
+## 4. Peta Dependency yang Dipakai
+
+Dependency inti berdasarkan [package.json](../package.json):
+
+- `expo`
+- `expo-status-bar`
+- `expo-font`
+- `expo-image-picker`
+- `react`
+- `react-native`
+- `react-dom`
+- `react-native-web`
+- `@expo/vector-icons`
+- `@react-navigation/native`
+- `@react-navigation/drawer`
+- `@react-navigation/bottom-tabs`
+- `@react-navigation/native-stack`
+- `react-native-gesture-handler`
+- `react-native-reanimated`
+- `react-native-worklets`
+- `react-native-safe-area-context`
+- `react-native-screens`
+
+Keputusan arsitektural penting:
+
+- `@react-navigation/stack` tidak lagi digunakan
+- `@react-navigation/native-stack` dipilih untuk mengurangi kompleksitas dan menghindari error asset header pada Expo 55
+
+## 5. Hierarki Navigator
 
 ```mermaid
 flowchart TD
-    A["NavigationContainer"] --> B["Drawer Navigator"]
-    B --> C["Beranda"]
-    B --> D["Jadwal Kuliah"]
-    B --> E["Pengumuman"]
-    B --> F["Tentang Kampus"]
-    C --> G["Bottom Tab Navigator"]
-    G --> H["Mata Kuliah"]
-    G --> I["Nilai"]
-    G --> J["Profil Mahasiswa"]
-    H --> K["Native Stack Navigator"]
-    K --> L["CourseList"]
-    K --> M["CourseDetail"]
-    A --> N["ProfileAvatarContext Provider"]
+    A["registerRootComponent(App)"] --> B["App"]
+    B --> C["ProfileAvatarContext.Provider"]
+    C --> D["NavigationContainer"]
+    D --> E["Drawer Navigator"]
+    E --> F["Beranda"]
+    E --> G["Jadwal Kuliah"]
+    E --> H["Pengumuman"]
+    E --> I["Tentang Kampus"]
+    F --> J["Bottom Tab Navigator"]
+    J --> K["Mata Kuliah"]
+    J --> L["Nilai"]
+    J --> M["Profil Mahasiswa"]
+    K --> N["Native Stack Navigator"]
+    N --> O["CourseList"]
+    N --> P["CourseDetail"]
 ```
 
-## 4. Lapisan Navigasi
+## 6. Lapisan Navigasi
 
-### Layer 1: Drawer Navigator
+### 6.1 Drawer Navigator
+
+Navigator terluar adalah `Drawer.Navigator`.
 
 Tanggung jawab:
 
-- entry point utama aplikasi
-- menyediakan menu global
-- menampung screen yang tidak selalu berada dalam konteks tab
+- menyediakan navigasi global
+- mengelompokkan layar tingkat aplikasi
+- menjadi parent navigator bagi seluruh struktur lainnya
 
-Screen:
+Screen yang didaftarkan:
 
 - `Beranda`
 - `JadwalKuliah`
 - `Pengumuman`
 - `TentangKampus`
 
-Catatan implementasi:
+Seluruh screen drawer menggunakan `headerShown: false`, karena tanggung jawab header dipindahkan ke `ScreenTopBar`.
 
-- `drawerContent` menggunakan komponen custom `CampusDrawerContent`
-- avatar dan identitas mahasiswa pada drawer mengambil data dari `ProfileAvatarContext`
+### 6.2 Bottom Tab Navigator
 
-### Layer 2: Bottom Tab Navigator
+Navigator tingkat kedua dibentuk pada fungsi `HomeTabs`.
 
 Tanggung jawab:
 
-- mengelompokkan fitur inti akademik di area Beranda
-- memberi akses cepat ke fitur yang paling sering dipakai
+- memisahkan fitur utama akademik pada konteks Beranda
+- menyediakan akses cepat ke layar yang paling sering dipakai
 
-Tab:
+Tab yang tersedia:
 
 - `MataKuliah`
 - `Nilai`
 - `ProfilMahasiswa`
 
-Catatan implementasi:
+Karakteristik implementasi:
 
-- tab `Nilai` memakai `tabBarBadge`
-- badge disimpan sebagai state lokal `unreadGradeCount`
-- badge otomatis di-reset saat tab `Nilai` menerima fokus
+- ikon tab berganti antara state aktif dan tidak aktif
+- warna aktif menggunakan `COLORS.primaryContainer`
+- label tab memakai gaya tipografi tersendiri
+- tab `Nilai` memiliki badge notifikasi yang bersifat dinamis
 
-### Layer 3: Native Stack Navigator
+### 6.3 Native Stack Navigator
+
+Navigator tingkat ketiga dibentuk pada fungsi `CourseStackNavigator`.
 
 Tanggung jawab:
 
-- menangani transisi hierarkis daftar ke detail
-- menjaga pola navigasi drill-down tetap natural
-- menghindari masalah asset header pada Expo 55 yang sempat muncul saat memakai stack berbasis JavaScript
+- menangani pola navigasi hierarkis dari daftar ke detail
+- mempertahankan histori layar untuk screen `CourseDetail`
 
-Screen:
+Screen yang tersedia:
 
 - `CourseList`
 - `CourseDetail`
 
 Catatan implementasi:
 
-- `CourseDetailScreen` tetap memakai `navigation.setOptions()` untuk memenuhi bonus header dinamis
-- native header disembunyikan karena aplikasi memakai top bar custom yang konsisten
+- stack yang dipakai adalah `createNativeStackNavigator`
+- header native tetap disembunyikan agar seluruh layar memakai top bar kustom yang konsisten
 
-## 5. Komponen Navigasi Pendukung
+## 7. Struktur Fungsi Utama pada `App.tsx`
 
-### `ScreenTopBar`
+Bagian ini disusun untuk menyelaraskan dokumentasi dengan struktur kode aktual.
 
-Komponen ini dipakai oleh seluruh layar utama sebagai lapisan navigasi visual yang konsisten.
+### 7.1 `COLORS`
 
-Tanggung jawab:
+Konstanta `COLORS` menjadi design token sederhana yang dipakai oleh:
 
-- menampilkan judul layar dan eyebrow
-- membuka drawer melalui tombol `menu` di kiri atas
-- menampilkan tombol `back` di kanan atas saat layar memiliki histori kembali
-- menampilkan avatar profil pada layar non-detail
+- `NavigationContainer theme`
+- seluruh style layout dan komponen
+- warna aktif, pasif, surface, dan aksen
 
-Cara kerja drawer global:
+### 7.2 `STUDENT`
 
-- komponen menelusuri parent navigator hingga menemukan navigator yang memiliki fungsi `openDrawer`
-- pendekatan ini membuat drawer dapat diakses dari screen yang berada di dalam tab maupun native stack
-
-### `CampusDrawerContent`
-
-Komponen custom drawer ini menggantikan drawer default agar:
-
-- tampilan konsisten dengan referensi visual
-- avatar profil yang diperbarui ikut tampil pada sidebar
-- metadata mahasiswa terlihat langsung dari area navigasi global
-
-## 6. Data dan State
-
-### Data domain lokal
-
-Data utama masih disimpan sebagai konstanta lokal karena fokus tugas berada pada navigasi dan komposisi layar.
-
-#### `STUDENT`
-
-Menyimpan identitas mahasiswa:
+Konstanta `STUDENT` menyimpan data mahasiswa:
 
 - nama
 - NIM
@@ -144,9 +196,16 @@ Menyimpan identitas mahasiswa:
 - SKS lulus
 - avatar default
 
-#### `COURSES`
+### 7.3 `COURSES`
 
-Array objek mata kuliah berisi:
+Konstanta `COURSES` berisi daftar mata kuliah yang dipakai oleh:
+
+- halaman daftar mata kuliah
+- halaman detail mata kuliah
+- halaman nilai
+- perhitungan badge notifikasi nilai
+
+Setiap objek mata kuliah memiliki properti:
 
 - `id`
 - `name`
@@ -161,125 +220,268 @@ Array objek mata kuliah berisi:
 - `grade`
 - `isNew`
 
-#### `WEEKLY_SCHEDULE`
+### 7.4 `GRADE_NOTIFICATION_COUNT`
 
-Array dua dimensi untuk jadwal mingguan berdasarkan hari.
+Konstanta ini dihitung dari jumlah item pada `COURSES` yang memiliki `isNew: true`. Nilai tersebut dipakai sebagai basis awal badge tab `Nilai`.
 
-### State UI lokal
+### 7.5 `WEEKLY_SCHEDULE`
 
-Selain konstanta data, aplikasi memiliki state UI berikut:
+Konstanta ini menyimpan jadwal mingguan dalam bentuk array dua dimensi. Setiap indeks merepresentasikan satu hari dan berisi daftar sesi kuliah.
 
-#### `avatarUri`
+### 7.6 `theme`
 
-- disimpan pada `ProfileAvatarContext`
-- dipakai oleh halaman profil, top bar, dan drawer
-- berubah saat pengguna memilih foto dari galeri
+Objek `theme` diteruskan ke `NavigationContainer`.
 
-#### `unreadGradeCount`
+Tanggung jawab:
 
-- disimpan pada `HomeTabs`
-- menjadi sumber nilai badge tab `Nilai`
-- di-reset saat tab `Nilai` dibuka
+- menyelaraskan warna navigasi dengan palet aplikasi
+- menetapkan font weight untuk hirarki tipografi pada level navigasi
+- menjaga konsistensi visual antar navigator
 
-## 7. Pemetaan Bonus Feature
+### 7.7 `ProfileAvatarContext`
 
-### `useNavigation()`
+`ProfileAvatarContext` menyimpan:
 
-Lokasi:
+- `avatarUri`
+- `setAvatarUri`
 
-- `QuickNavigateCard`
+Fungsi context:
 
-Alasan:
+- membagikan avatar yang sedang aktif ke banyak layar
+- menghindari prop drilling dari root ke komponen drawer, top bar, dan profil
 
-- komponen reusable ini tidak menerima prop `navigation`
-- tetap perlu membuka `CourseDetail`
+### 7.8 `useProfileAvatar`
 
-### `navigation.setOptions()`
+Hook ini menjadi akses tunggal ke context avatar. Jika context tidak tersedia, hook melempar error, sehingga kegagalan wiring dapat diketahui lebih awal.
 
-Lokasi:
+### 7.9 `App`
 
-- `CourseDetailScreen`
+Fungsi `App` melakukan:
 
-Alasan:
+- inisialisasi state `avatarUri`
+- penyediaan `ProfileAvatarContext.Provider`
+- pemasangan `NavigationContainer`
+- pemasangan `Drawer.Navigator`
+- konfigurasi `StatusBar`
 
-- judul screen tetap disetel dinamis mengikuti mata kuliah aktif
-- meskipun header native disembunyikan, implementasi ini tetap menunjukkan penguasaan API bonus yang diminta
+### 7.10 `HomeTabs`
 
-### `tabBarBadge`
+Fungsi `HomeTabs` melakukan:
 
-Lokasi:
+- inisialisasi state `unreadGradeCount`
+- konfigurasi icon tab berdasarkan route
+- pemberian badge pada tab `Nilai`
+- reset badge saat screen `Nilai` fokus
 
-- tab `Nilai`
+### 7.11 `CourseStackNavigator`
 
-Alasan:
+Fungsi ini memisahkan alur daftar dan detail mata kuliah dari layar lain di dalam tab.
 
-- menunjukkan jumlah pembaruan nilai baru
-- lebih bermakna daripada badge statis
+### 7.12 `CampusDrawerContent`
 
-## 8. Alur Pengguna
+Fungsi ini membentuk sidebar kustom dengan:
 
-### Alur Mata Kuliah
+- kartu profil singkat mahasiswa
+- daftar menu drawer dengan state aktif
+- footer informasi semester
 
-1. Pengguna membuka `Beranda`
-2. Tab default mengarah ke `MataKuliah`
-3. Pengguna melihat daftar MK
-4. Pengguna menekan kartu MK atau kartu akses cepat
-5. Aplikasi berpindah ke `CourseDetail`
-6. Top bar menampilkan tombol `back`
-7. Drawer tetap dapat dibuka dari tombol `menu`
+### 7.13 `CourseListScreen`
 
-### Alur Nilai
+Fungsi ini menampilkan:
 
-1. Pengguna membuka tab `Nilai`
-2. Badge menampilkan jumlah nilai baru sebelum tab dibuka
-3. Saat tab menerima fokus, badge di-reset
-4. Halaman menampilkan daftar nilai semester
+- top bar halaman
+- hero banner
+- quick navigation card
+- daftar kartu mata kuliah
 
-### Alur Profil
+Perilaku khusus:
 
-1. Pengguna membuka `Profil Mahasiswa`
-2. Pengguna menekan tombol kamera atau tombol `Ganti foto`
-3. Aplikasi meminta izin akses galeri
-4. Pengguna memilih gambar
-5. `avatarUri` diperbarui
-6. Avatar baru tampil serentak di profil, top bar, dan drawer
+- memakai `useWindowDimensions()`
+- mengubah daftar menjadi grid dua kolom saat lebar layar `>= 700`
 
-### Alur Jadwal
+### 7.14 `QuickNavigateCard`
 
-1. Pengguna membuka drawer dari tombol `menu`
-2. Memilih `Jadwal Kuliah`
-3. Aplikasi menampilkan tabel mingguan per hari dalam `ScrollView` horizontal
+Fungsi ini mengimplementasikan bonus `useNavigation()` pada komponen yang tidak menerima prop `navigation`.
 
-## 9. Keputusan Desain
+### 7.15 `CourseDetailScreen`
 
-Referensi visual `stitch` mengarahkan implementasi pada:
+Fungsi ini:
 
-- warna primer navy
-- aksen gold
-- tonal surfaces
-- hero section editorial
-- bottom navigation membulat
-- drawer profile block
+- menerima parameter `course`
+- menyetel judul dinamis melalui `navigation.setOptions()`
+- menampilkan hero detail mata kuliah
+- menampilkan detail terstruktur dengan `DetailRow`
 
-Adaptasi ke React Native dilakukan melalui:
+### 7.16 `GradesScreen`
+
+Fungsi ini:
+
+- menampilkan top bar dan hero performa akademik
+- menampilkan ringkasan IP semester
+- menampilkan daftar nilai semua mata kuliah
+
+### 7.17 `ProfileScreen`
+
+Fungsi ini:
+
+- membaca dan memperbarui `avatarUri`
+- meminta izin akses galeri
+- membuka pemilih gambar
+- memperbarui foto profil
+- menampilkan ringkasan dan detail data mahasiswa
+
+### 7.18 `ScheduleScreen`
+
+Fungsi ini menampilkan jadwal mingguan dalam `ScrollView` horizontal dengan lima kolom harian.
+
+### 7.19 `AnnouncementsScreen`
+
+Fungsi ini menampilkan tiga pengumuman lokal dari array internal screen.
+
+### 7.20 `AboutCampusScreen`
+
+Fungsi ini menampilkan profil singkat institusi kampus.
+
+### 7.21 `ScreenTopBar`
+
+Ini adalah komponen lintas layar yang paling penting dalam iterasi saat ini.
+
+Fungsinya:
+
+- menampilkan judul dan eyebrow
+- membuka drawer dari tombol kiri
+- menampilkan tombol kembali pada layar detail
+- menampilkan avatar profil pada layar non-detail
+- menerapkan jarak aman terhadap status bar dengan `useSafeAreaInsets()`
+
+Mekanisme drawer global:
+
+- komponen menelusuri parent navigation secara iteratif
+- ketika menemukan objek navigation yang memiliki `openDrawer()`, komponen memanggil fungsi tersebut
+- pendekatan ini memastikan sidebar dapat diakses dari screen yang berada dalam stack maupun tab
+
+### 7.22 `HeroBanner`, `SectionTitle`, `MetricCard`, `DetailRow`
+
+Keempat fungsi ini menjadi komponen presentasi ulang pakai yang dipakai agar layout tetap konsisten dan mudah dibaca.
+
+## 8. Lapisan Data dan State UI
+
+### 8.1 Data Domain Lokal
+
+Data utama masih diletakkan langsung di `App.tsx` karena fokus proyek adalah navigasi dan komposisi layar, bukan integrasi API atau state management eksternal.
+
+Data domain lokal:
+
+- `STUDENT`
+- `COURSES`
+- `WEEKLY_SCHEDULE`
+
+### 8.2 State UI Lokal
+
+State UI yang aktif pada kode saat ini:
+
+- `avatarUri` pada root `App`
+- `unreadGradeCount` pada `HomeTabs`
+
+Distribusi state dilakukan dengan dua pola:
+
+- context untuk state yang dibutuhkan lintas layar
+- state lokal komponen untuk state yang hanya relevan pada navigator tertentu
+
+## 9. Lapisan Presentasi dan Sistem Visual
+
+### 9.1 Komponen Visual
+
+Sistem visual dibangun dengan:
 
 - `StyleSheet`
 - `ScrollView`
 - `Pressable`
-- ikon `Ionicons` dan `MaterialCommunityIcons`
-- top bar dan drawer custom agar pola navigasi tetap konsisten di mobile
+- `Text`
+- `View`
+- `Image`
 
-## 10. Alasan Struktur Ini Dipertahankan
+### 9.2 Sistem Warna
 
-- peran setiap navigator tetap jelas
-- arsitektur tetap modular meskipun semua layar masih berada dalam satu file
-- perubahan kompatibilitas Expo 55 tidak mengubah struktur inti tugas
-- penambahan context dan state UI tidak menambah ketergantungan global yang berlebihan
+Palet warna mengikuti referensi visual yang diadaptasi ke token berikut:
 
-## 11. Potensi Pengembangan Lanjutan
+- `background`
+- `surface`
+- `surfaceLow`
+- `surfaceHigh`
+- `primary`
+- `primaryContainer`
+- `primarySoft`
+- `secondary`
+- `secondarySoft`
+- `text`
+- `textMuted`
+
+### 9.3 Safe Area dan Header
+
+Safe area ditangani dengan `react-native-safe-area-context` melalui:
+
+- `SafeAreaView` pada drawer
+- `useSafeAreaInsets()` pada top bar
+
+Keputusan ini menggantikan penggunaan `SafeAreaView` lama dari `react-native` yang sudah deprecated.
+
+### 9.4 Adaptasi Responsif
+
+Implementasi responsif yang ada saat ini berada pada `CourseListScreen`.
+
+Perilaku:
+
+- pada layar sempit, kartu mata kuliah tampil satu kolom
+- pada layar yang lebih lebar, kartu berubah menjadi dua kolom
+
+## 10. Pemetaan Kebutuhan Praktikum ke Arsitektur
+
+### 10.1 Spesifikasi Wajib
+
+Pemetaan ke struktur kode:
+
+- drawer global dipenuhi oleh `Drawer.Navigator`
+- tab beranda dipenuhi oleh `HomeTabs`
+- stack daftar ke detail dipenuhi oleh `CourseStackNavigator`
+- profil mahasiswa dipenuhi oleh `ProfileScreen`
+- jadwal mingguan dipenuhi oleh `ScheduleScreen`
+
+### 10.2 Tantangan Bonus
+
+Pemetaan ke struktur kode:
+
+- `useNavigation()` dipenuhi oleh `QuickNavigateCard`
+- `navigation.setOptions()` dipenuhi oleh `CourseDetailScreen`
+- `tabBarBadge` dipenuhi oleh `HomeTabs`
+
+## 11. Perubahan Arsitektur Dibanding Iterasi Sebelumnya
+
+Perubahan yang telah terjadi dan masih berlaku pada kode saat ini:
+
+- migrasi dari `@react-navigation/stack` ke `@react-navigation/native-stack`
+- penggantian header bawaan navigator dengan `ScreenTopBar`
+- akses drawer dibuat global dari seluruh layar
+- avatar profil dipusatkan dengan context
+- badge notifikasi nilai berubah dari statis menjadi dinamis
+- halaman profil memperoleh alur penggantian foto dengan `expo-image-picker`
+
+Kesimpulan perubahan:
+
+- struktur inti tiga lapisan navigator tetap sama
+- implementasi internal menjadi lebih stabil, lebih konsisten, dan lebih sesuai untuk Expo SDK 55
+
+## 12. Risiko Teknis dan Catatan Lanjutan
+
+Risiko atau batasan yang masih ada:
+
+- seluruh screen dan style masih berada pada satu file `App.tsx`
+- avatar belum dipersist ke local storage
+- data akademik masih statis dan belum terhubung ke API
+
+Peluang pengembangan:
 
 - memecah navigator, screen, dan komponen ke folder terpisah
-- menyimpan `avatarUri` ke local storage agar persist setelah aplikasi ditutup
-- memindahkan data mahasiswa, nilai, dan jadwal ke API atau database lokal
-- menambah auth flow dan session state
-- menambahkan test untuk navigasi dan state badge
+- menambahkan persistensi untuk avatar profil
+- memindahkan data ke layanan backend atau storage lokal
+- menambahkan pengujian navigasi dan pengujian state badge

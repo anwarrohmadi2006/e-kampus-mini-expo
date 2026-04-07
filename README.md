@@ -1,12 +1,21 @@
 # E-Kampus Mini
 
-Aplikasi kampus mini berbasis Expo dan React Native untuk memenuhi tugas navigasi praktikum mobile. Implementasi ini menggunakan struktur navigator bertingkat: `Drawer` di luar, `Bottom Tab` di dalam menu Beranda, dan `Native Stack` di dalam tab Mata Kuliah.
+E-Kampus Mini adalah aplikasi kampus berbasis Expo dan React Native yang disusun untuk memenuhi praktikum navigasi mobile. Implementasi saat ini telah menyesuaikan kode aktual pada proyek, dengan struktur navigasi `Drawer -> Bottom Tab -> Native Stack`, komponen top bar kustom, badge nilai dinamis, dan fitur penggantian foto profil mahasiswa.
 
-## Ringkasan
+## 1. Tujuan Implementasi
 
-Referensi visual yang digunakan pada pengembangan aplikasi berasal dari paket desain `stitch` dan telah disalin ke dalam repositori ini agar dapat ditinjau langsung tanpa bergantung pada path lokal.
+Tujuan aplikasi ini adalah:
 
-Referensi yang disertakan dalam repo:
+- menerapkan nested navigator sesuai spesifikasi praktikum
+- menampilkan data akademik mahasiswa dalam beberapa layar utama
+- menjaga konsistensi navigasi melalui drawer, tab, stack, dan top bar kustom
+- mengadaptasi referensi desain `stitch` ke lingkungan Expo SDK 55
+
+## 2. Referensi Visual
+
+Referensi visual yang digunakan berasal dari paket desain `stitch` dan telah disalin ke dalam repositori agar dapat ditinjau langsung tanpa bergantung pada path lokal.
+
+Referensi yang tersedia di repo:
 
 - [Daftar Mata Kuliah - HTML](./docs/references/daftar_mata_kuliah/code.html)
 - [Daftar Mata Kuliah - Screenshot](./docs/references/daftar_mata_kuliah/screen.png)
@@ -16,126 +25,328 @@ Referensi yang disertakan dalam repo:
 - [Profil Mahasiswa - Screenshot](./docs/references/profil_mahasiswa/screen.png)
 - [Scholar Metric - Design Notes](./docs/references/scholar_metric/DESIGN.md)
 
-Adaptasi yang diterapkan ke Expo:
+Adaptasi desain yang diterapkan pada aplikasi:
 
-- palet warna navy-gold
-- hero section editorial
-- permukaan tonal bertingkat
-- drawer dengan kartu profil
-- bottom tab membulat
-- kartu mata kuliah dan jadwal tanpa visual yang kaku
+- palet navy-gold sebagai warna utama
+- hero section editorial dengan sudut membulat
+- drawer berisi kartu identitas mahasiswa
+- bottom tab membulat dengan badge notifikasi
+- kartu mata kuliah dan jadwal dengan permukaan tonal bertingkat
 
-## Teknologi
+## 3. Stack Teknologi dan Konfigurasi
 
-- Expo `55.0.11`
-- React Native `0.83.4`
-- React `19.2.0`
-- React Navigation:
-  - `@react-navigation/native`
-  - `@react-navigation/drawer`
-  - `@react-navigation/bottom-tabs`
-  - `@react-navigation/native-stack`
-- `react-native-gesture-handler`
-- `react-native-reanimated`
-- `react-native-worklets`
-- `react-native-safe-area-context`
-- `@expo/vector-icons`
-- `expo-font`
-- `expo-image-picker`
+### 3.1 Runtime Dependency
 
-## Audit Dependency
+Berdasarkan [package.json](./package.json), dependency runtime yang digunakan adalah:
 
-Dependency inti yang dipakai aplikasi:
+- `expo` `^55.0.11`
+- `expo-status-bar` `~55.0.5`
+- `expo-font` `~55.0.6`
+- `expo-image-picker` `~55.0.17`
+- `react` `19.2.0`
+- `react-native` `0.83.4`
+- `react-dom` `19.2.0`
+- `react-native-web` `^0.21.0`
+- `@expo/vector-icons` `^15.0.3`
+- `@react-navigation/native` `^7.2.2`
+- `@react-navigation/drawer` `^7.9.8`
+- `@react-navigation/bottom-tabs` `^7.15.9`
+- `@react-navigation/native-stack` `^7.14.10`
+- `react-native-gesture-handler` `~2.30.0`
+- `react-native-reanimated` `4.2.1`
+- `react-native-worklets` `0.7.2`
+- `react-native-safe-area-context` `~5.6.0`
+- `react-native-screens` `~4.23.0`
 
-- `expo`: runtime dan tooling utama Expo SDK 55
-- `@react-navigation/native`: fondasi navigasi
-- `@react-navigation/drawer`: sidebar atau drawer utama
-- `@react-navigation/bottom-tabs`: tab pada halaman Beranda
-- `@react-navigation/native-stack`: stack untuk daftar dan detail mata kuliah
-- `react-native-gesture-handler`: gesture drawer dan navigasi
-- `react-native-screens`: optimasi screen native
-- `react-native-safe-area-context`: safe area yang sesuai dan tidak deprecated
-- `react-native-reanimated`: dependensi transitif untuk drawer dan animasi navigator
-- `react-native-worklets`: peer dependency yang dibutuhkan Reanimated di Expo 55
-- `expo-font`: peer dependency untuk `@expo/vector-icons`
-- `expo-image-picker`: memilih foto profil dari galeri perangkat
+### 3.2 Development Dependency
 
-Dependency yang dirampingkan:
+Dependency pengembangan yang digunakan:
 
-- `@react-navigation/stack` dihapus
+- `typescript` `~5.9.2`
+- `@types/react` `~19.2.10`
+- `babel-preset-expo` `^55.0.15`
 
-Alasannya:
+### 3.3 Konfigurasi Proyek
 
-- `@react-navigation/native-stack` lebih ringan untuk kebutuhan stack sederhana
-- mengurangi jalur asset header JavaScript dari `@react-navigation/stack`
-- lebih cocok dengan stack native pada Expo SDK 55
+Konfigurasi utama proyek berdasarkan file yang ada:
 
-## Cara Menjalankan
+- [index.ts](./index.ts): mendaftarkan `App` sebagai root component dengan `registerRootComponent`
+- [app.json](./app.json): orientasi `portrait`, `userInterfaceStyle` `light`, `predictiveBackGestureEnabled` dinonaktifkan pada Android, serta plugin `expo-font`
+- [babel.config.js](./babel.config.js): memakai `babel-preset-expo` dan plugin `react-native-reanimated/plugin`
+- [tsconfig.json](./tsconfig.json): `strict: true` dan mengecualikan folder `dist` serta `node_modules`
+
+### 3.4 Dependency yang Dirampingkan
+
+Dependency yang dihapus dari implementasi sebelumnya:
+
+- `@react-navigation/stack`
+
+Alasan perampingan:
+
+- `@react-navigation/native-stack` lebih sesuai untuk alur daftar ke detail
+- mengurangi risiko error asset header pada Expo 55
+- lebih ringan untuk struktur stack yang sederhana
+
+## 4. Cara Menjalankan
+
+Perintah dasar untuk menjalankan proyek:
 
 ```bash
 npm install
 npx expo start
 ```
 
-Untuk membersihkan cache:
+Perintah shortcut yang tersedia:
+
+```bash
+npm run android
+npm run ios
+npm run web
+```
+
+Untuk membersihkan cache Metro:
 
 ```bash
 npx expo start --clear
 ```
 
-## Pembaruan Terbaru
+## 5. Struktur Navigasi Aplikasi
 
-- tombol sidebar tersedia di semua layar melalui tombol `menu` di kiri atas
-- tombol `back` muncul di kanan atas pada layar detail yang memiliki alur kembali
-- badge tab `Nilai` kini dinamis, mengikuti jumlah pembaruan nilai baru
-- badge `Nilai` otomatis hilang setelah tab `Nilai` dibuka
-- foto profil mahasiswa bisa diganti dari galeri dan tersinkron ke top bar, sidebar, dan halaman profil
-
-## Struktur Navigasi
+Struktur navigasi aktual pada kode adalah sebagai berikut:
 
 ```text
-Drawer Navigator
-|-- Beranda
-|   `-- Bottom Tab Navigator
-|       |-- Mata Kuliah
-|       |   `-- Native Stack Navigator
-|       |       |-- Daftar Mata Kuliah
-|       |       `-- Detail Mata Kuliah
-|       |-- Nilai
-|       `-- Profil Mahasiswa
-|-- Jadwal Kuliah
-|-- Pengumuman
-`-- Tentang Kampus
+NavigationContainer
+`-- Drawer Navigator
+    |-- Beranda
+    |   `-- Bottom Tab Navigator
+    |       |-- Mata Kuliah
+    |       |   `-- Native Stack Navigator
+    |       |       |-- CourseList
+    |       |       `-- CourseDetail
+    |       |-- Nilai
+    |       `-- Profil Mahasiswa
+    |-- Jadwal Kuliah
+    |-- Pengumuman
+    `-- Tentang Kampus
 ```
 
-Dokumentasi arsitektur lengkap ada di [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
+Dokumentasi arsitektur yang lebih teknis tersedia pada [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
-## Pemetaan Spesifikasi Wajib
+## 6. Implementasi Berdasarkan Struktur Kode
 
-### 1. Implementasi Drawer Navigator
+Bagian ini disusun setelah meninjau ulang `App.tsx` secara menyeluruh agar isi laporan sesuai dengan kode aktual.
 
-Aplikasi telah mengimplementasikan `Drawer.Navigator` sebagai navigasi utama. Menu yang tersedia terdiri atas `Beranda`, `Jadwal Kuliah`, `Pengumuman`, dan `Tentang Kampus`. Implementasi ini berada pada [App.tsx](./App.tsx).
+### 6.1 Root Application
 
-### 2. Implementasi Bottom Tab pada Halaman Beranda
+Fungsi `App` berperan sebagai root komposisi aplikasi dan melakukan hal berikut:
 
-Halaman `Beranda` telah memuat `Bottom Tab Navigator` dengan tiga tab utama, yaitu `Mata Kuliah`, `Nilai`, dan `Profil Mahasiswa`. Struktur ini diterapkan pada `Tab.Navigator` di [App.tsx](./App.tsx).
+- membungkus aplikasi dengan `ProfileAvatarContext.Provider`
+- menyimpan state `avatarUri` untuk avatar mahasiswa yang dapat berubah
+- memasang `NavigationContainer` dengan `theme` kustom
+- menampilkan `StatusBar` dengan gaya gelap
+- menginisialisasi `Drawer.Navigator` sebagai navigator utama
 
-### 3. Implementasi Stack pada Tab Mata Kuliah
+### 6.2 Drawer Navigator
 
-Tab `Mata Kuliah` telah menggunakan `Native Stack Navigator` untuk mendukung alur berpindah dari daftar mata kuliah menuju halaman detail. Implementasi ini berada pada `CourseStack.Navigator`.
+`Drawer.Navigator` memuat empat menu utama:
 
-Halaman detail mata kuliah menampilkan informasi berikut:
+- `Beranda`
+- `Jadwal Kuliah`
+- `Pengumuman`
+- `Tentang Kampus`
+
+Semua `Drawer.Screen` menggunakan `headerShown: false` karena tampilan header digantikan oleh komponen `ScreenTopBar` kustom.
+
+Selain itu, drawer memakai `drawerContent` kustom melalui fungsi `CampusDrawerContent`, sehingga sidebar tidak lagi menggunakan tampilan default React Navigation.
+
+### 6.3 Bottom Tab Navigator pada Beranda
+
+Fungsi `HomeTabs` menginisialisasi `Bottom Tab Navigator` yang terdiri atas:
+
+- `MataKuliah`
+- `Nilai`
+- `ProfilMahasiswa`
+
+Karakteristik implementasi pada kode:
+
+- seluruh tab menyembunyikan header bawaan
+- ikon tab dipilih dinamis sesuai route aktif
+- warna aktif tab menggunakan `COLORS.primaryContainer`
+- badge tab `Nilai` memakai state `unreadGradeCount`
+- badge di-reset ke `0` saat tab `Nilai` menerima event `focus`
+
+### 6.4 Native Stack pada Tab Mata Kuliah
+
+Fungsi `CourseStackNavigator` membentuk alur drill-down dari daftar menuju detail:
+
+- `CourseList`
+- `CourseDetail`
+
+Stack yang digunakan adalah `createNativeStackNavigator`. Header native tetap dinonaktifkan pada kedua screen karena aplikasi memakai top bar kustom untuk menjaga tata letak tetap konsisten.
+
+### 6.5 Custom Drawer Content
+
+Fungsi `CampusDrawerContent` memanfaatkan `useProfileAvatar()` sehingga foto yang diganti di halaman profil langsung tercermin pada sidebar.
+
+Konten drawer meliputi:
+
+- avatar mahasiswa
+- nama mahasiswa
+- program studi
+- NIM
+- daftar menu drawer
+- footer informasi semester
+
+### 6.6 Halaman Mata Kuliah
+
+Fungsi `CourseListScreen` menampilkan:
+
+- `ScreenTopBar`
+- `HeroBanner`
+- `QuickNavigateCard`
+- daftar mata kuliah dari konstanta `COURSES`
+
+Perilaku penting:
+
+- navigasi ke detail dilakukan dengan `navigation.navigate('CourseDetail', { course })`
+- daftar mata kuliah adaptif terhadap lebar layar
+- saat lebar layar `>= 700`, daftar berubah menjadi grid dua kolom melalui `useWindowDimensions()`
+
+### 6.7 Quick Navigation Card
+
+Fungsi `QuickNavigateCard` merupakan implementasi bonus `useNavigation()`. Komponen ini tidak menerima prop `navigation`, tetapi tetap dapat membuka `CourseDetail` dengan mengambil item pertama pada `COURSES`.
+
+### 6.8 Halaman Detail Mata Kuliah
+
+Fungsi `CourseDetailScreen` menerima parameter `course` dari route dan menampilkan:
 
 - nama mata kuliah
+- kode mata kuliah
 - jumlah SKS
 - dosen pengampu
-- jadwal perkuliahan
+- jadwal
 - ruangan
 - deskripsi singkat
 
-### 4. Implementasi Halaman Profil Mahasiswa
+Selain itu, fungsi ini memakai `useLayoutEffect()` dan `navigation.setOptions({ title: course.name })` untuk mengubah judul screen secara dinamis sesuai mata kuliah yang dipilih.
 
-Halaman `Profil Mahasiswa` telah menampilkan data diri mahasiswa secara lengkap melalui `ProfileScreen`. Informasi yang ditampilkan meliputi:
+### 6.9 Halaman Nilai
+
+Fungsi `GradesScreen` menampilkan:
+
+- top bar layar nilai
+- hero ringkasan performa akademik
+- kartu IP semester
+- daftar nilai semua mata kuliah berdasarkan konstanta `COURSES`
+
+Sumber badge notifikasi tab `Nilai` berasal dari `GRADE_NOTIFICATION_COUNT`, yaitu jumlah mata kuliah yang memiliki properti `isNew: true`.
+
+### 6.10 Halaman Profil Mahasiswa
+
+Fungsi `ProfileScreen` menampilkan:
+
+- avatar mahasiswa
+- tombol kamera untuk memilih foto
+- tombol `Ganti foto`
+- nama dan program studi
+- IPK kumulatif
+- status akademik
+- semester
+- SKS lulus
+- fakultas
+- detail data diri lengkap
+
+Fitur penggantian foto dilakukan dengan:
+
+- `ImagePicker.requestMediaLibraryPermissionsAsync()`
+- `ImagePicker.launchImageLibraryAsync()`
+- pembaruan state `avatarUri` pada context
+
+### 6.11 Halaman Jadwal Kuliah
+
+Fungsi `ScheduleScreen` menyajikan jadwal mingguan dalam `ScrollView` horizontal. Data disusun menjadi lima kolom harian:
+
+- Senin
+- Selasa
+- Rabu
+- Kamis
+- Jumat
+
+Setiap kartu jadwal menampilkan jam, nama mata kuliah, ruangan, dan dosen.
+
+### 6.12 Halaman Pengumuman
+
+Fungsi `AnnouncementsScreen` memuat tiga item pengumuman lokal:
+
+- batas pengisian KRS
+- kuliah tamu
+- pemeliharaan sistem
+
+### 6.13 Halaman Tentang Kampus
+
+Fungsi `AboutCampusScreen` menampilkan profil singkat institusi:
+
+- nama kampus
+- alamat
+- visi
+- misi
+
+### 6.14 Komponen Navigasi Bersama
+
+Fungsi `ScreenTopBar` merupakan komponen kunci pada implementasi saat ini.
+
+Tanggung jawabnya:
+
+- menampilkan judul layar dan eyebrow
+- membuka drawer dari tombol `menu` di kiri atas
+- menampilkan tombol `back` di kanan atas pada layar yang membutuhkan histori kembali
+- menampilkan avatar profil pada layar non-detail
+- memanfaatkan `useSafeAreaInsets()` agar jarak terhadap status bar tetap aman
+
+Cara kerja pembukaan drawer:
+
+- komponen menelusuri parent navigator
+- saat menemukan objek navigation yang memiliki `openDrawer()`, komponen memanggil fungsi tersebut
+- pendekatan ini memungkinkan sidebar diakses dari semua layar, termasuk screen yang berada di dalam tab dan stack
+
+### 6.15 Komponen Presentasi Ulang Pakai
+
+Komponen bantu yang dipakai lintas layar:
+
+- `HeroBanner`
+- `SectionTitle`
+- `MetricCard`
+- `DetailRow`
+
+## 7. Pemetaan Spesifikasi Wajib
+
+### 1. Drawer berisi Beranda, Jadwal Kuliah, Pengumuman, dan Tentang Kampus
+
+Sudah diimplementasikan melalui `Drawer.Navigator` dan empat `Drawer.Screen` pada `App`.
+
+### 2. Tab Beranda berisi Mata Kuliah, Nilai, dan Profil Mahasiswa
+
+Sudah diimplementasikan melalui `Tab.Navigator` pada fungsi `HomeTabs`.
+
+### 3. Tab Mata Kuliah menggunakan Stack dari daftar MK ke detail MK
+
+Sudah diimplementasikan melalui `CourseStackNavigator` dengan dua screen:
+
+- `CourseList`
+- `CourseDetail`
+
+Halaman detail menampilkan:
+
+- nama mata kuliah
+- jumlah SKS
+- dosen
+- jadwal
+- ruangan
+- deskripsi singkat
+
+### 4. Halaman Profil Mahasiswa menampilkan data diri lengkap
+
+Sudah diimplementasikan pada `ProfileScreen`, dengan data yang ditampilkan meliputi:
 
 - nama
 - NIM
@@ -146,234 +357,98 @@ Halaman `Profil Mahasiswa` telah menampilkan data diri mahasiswa secara lengkap 
 - alamat
 - semester
 - status akademik
-- jumlah SKS lulus
+- SKS lulus
 - IPK
 
-### 5. Implementasi Halaman Jadwal Kuliah Mingguan
+### 5. Halaman Jadwal Kuliah menampilkan tabel jadwal mingguan
 
-Halaman `Jadwal Kuliah` telah menampilkan jadwal mingguan melalui `ScheduleScreen`. Jadwal disusun dalam bentuk kolom harian untuk:
+Sudah diimplementasikan pada `ScheduleScreen` dalam bentuk kolom harian dari Senin sampai Jumat. Setiap kolom menampilkan jam kuliah, mata kuliah, ruangan, dan dosen.
 
-- Senin
-- Selasa
-- Rabu
-- Kamis
-- Jumat
-
-Pada setiap kolom, informasi yang ditampilkan mencakup jam kuliah, nama mata kuliah, ruangan, dan dosen.
-
-## Tantangan Bonus
+## 8. Tantangan Bonus
 
 ### 1. `useNavigation()`
 
-Sudah diterapkan pada komponen `QuickNavigateCard`. Komponen ini tidak menerima `navigation` prop langsung, tetapi tetap bisa membuka detail MK melalui hook `useNavigation()`.
+Sudah diterapkan pada `QuickNavigateCard`.
 
 ### 2. `navigation.setOptions()`
 
-Sudah diterapkan pada `CourseDetailScreen` melalui `useLayoutEffect()` untuk mengubah judul header secara dinamis mengikuti nama mata kuliah yang sedang dibuka.
+Sudah diterapkan pada `CourseDetailScreen` melalui `useLayoutEffect()`.
 
-### 3. Badge notifikasi tab
+### 3. `tabBarBadge`
 
-Sudah diterapkan pada tab `Nilai` menggunakan badge dinamis berbasis data nilai baru. Badge akan otomatis hilang setelah tab `Nilai` dibuka.
+Sudah diterapkan pada tab `Nilai` dengan badge dinamis yang akan hilang setelah tab dibuka.
 
-### 4. Navigasi konsisten di semua layar
+### 4. Navigasi drawer dapat diakses dari semua layar
 
-Sudah diterapkan melalui top bar custom:
-
-- tombol `menu` di kiri atas membuka sidebar dari semua layar
-- tombol `back` di kanan atas hanya muncul pada layar yang memiliki alur kembali
+Sudah diterapkan melalui `ScreenTopBar` dan traversal parent navigation.
 
 ### 5. Ganti foto profil mahasiswa
 
-Sudah diterapkan pada `ProfileScreen` menggunakan `expo-image-picker`.
+Sudah diterapkan pada `ProfileScreen` menggunakan `expo-image-picker` dan `ProfileAvatarContext`.
 
-Perilakunya:
+## 9. Ringkasan Arsitektur
 
-- pengguna dapat memilih foto dari galeri
-- foto baru langsung dipakai pada halaman profil
-- avatar pada top bar ikut berubah
-- avatar pada drawer ikut berubah
+Arsitektur inti aplikasi tidak berubah, yaitu tetap menggunakan tiga lapisan navigator:
 
-## Penjelasan Arsitektur
+- `Drawer Navigator` sebagai navigasi global
+- `Bottom Tab Navigator` sebagai area fitur utama pada Beranda
+- `Native Stack Navigator` sebagai alur daftar ke detail pada tab Mata Kuliah
 
-### Alasan memakai tiga lapisan navigator
+Namun, implementasi pada versi saat ini mengalami penyempurnaan sebagai berikut:
 
-- `Drawer` dipakai untuk menu utama berskala aplikasi.
-- `Bottom Tab` dipakai untuk memecah area Beranda menjadi fitur akademik utama.
-- `Native Stack` dipakai untuk alur drill-down dari daftar mata kuliah ke detail mata kuliah.
+- stack lama diganti menjadi `native-stack`
+- header bawaan navigator diganti dengan top bar kustom
+- drawer dapat dibuka dari semua layar
+- state avatar dipusatkan melalui context
+- badge nilai menjadi stateful dan tidak lagi statis
 
-Struktur ini mengikuti kebutuhan UX yang berbeda di tiap level:
+## 10. Troubleshooting Expo 55
 
-- level global
-- level fitur utama
-- level detail konten
+### 10.1 Error `NativeWorklets... installTurboModule`
 
-### Perubahan arsitektur pada versi terbaru
+Penyebab utama error ini adalah mismatch antara layer native dan JavaScript pada stack Reanimated.
 
-Arsitektur inti tetap menggunakan tiga lapisan navigator, tetapi implementasinya telah diperbarui agar lebih stabil pada Expo SDK 55 dan lebih konsisten secara UX.
-
-Perubahan yang sudah diterapkan:
-
-- layer detail mata kuliah sekarang memakai `@react-navigation/native-stack`, bukan `@react-navigation/stack`
-- top bar custom dipakai di seluruh layar agar tombol `menu`, avatar, dan `back` konsisten
-- akses drawer dibuat global melalui traversal parent navigation, sehingga sidebar dapat dibuka dari semua layar
-- state avatar profil dibagikan melalui `ProfileAvatarContext`, sehingga perubahan foto langsung tercermin di halaman profil, top bar, dan drawer
-- badge pada tab `Nilai` dikelola sebagai state lokal tab dan otomatis di-reset saat layar `Nilai` dibuka
-
-### Pemisahan data dan presentasi
-
-Data domain utama saat ini disimpan sebagai konstanta lokal di `App.tsx`:
-
-- `STUDENT`
-- `COURSES`
-- `WEEKLY_SCHEDULE`
-
-Selain data statis, terdapat state UI lokal yang dipakai untuk interaksi aplikasi:
-
-- `avatarUri` pada `ProfileAvatarContext`
-- `unreadGradeCount` pada `HomeTabs`
-
-Pendekatan ini dipilih agar fokus tugas tetap pada navigasi dan interaksi layar tanpa menambah kompleksitas state management eksternal.
-
-## Pertanyaan Analitis
-
-### 1. Perbedaan `navigation.navigate()` dan `navigation.push()`
-
-`navigation.navigate()` dipakai untuk berpindah ke screen tertentu. Jika screen tujuan sudah ada di stack, React Navigation cenderung memanfaatkan screen yang sudah ada atau memfokuskan route tersebut daripada selalu membuat instance baru.
-
-`navigation.push()` selalu menambahkan screen baru ke puncak stack walaupun screen dengan nama yang sama sudah ada sebelumnya.
-
-Gunakan `push()` ketika:
-
-- Anda perlu membuka screen yang sama berulang kali dengan data berbeda.
-- Anda ingin histori stack bertambah walaupun nama screen sama.
-
-Contoh:
-
-- dari detail MK A lalu membuka detail MK B lagi pada screen detail yang sama
-- dari detail berita membuka berita lain pada screen detail yang sama
-
-### 2. Mengapa `import 'react-native-gesture-handler'` harus paling atas
-
-Drawer Navigator mengandalkan sistem gesture dari `react-native-gesture-handler`. Import ini harus dieksekusi paling awal agar gesture system terpasang sebelum komponen navigasi diinisialisasi.
-
-Jika tidak diletakkan di baris paling atas:
-
-- drawer bisa gagal bekerja
-- swipe gesture bisa error
-- aplikasi bisa menampilkan warning atau crash pada inisialisasi navigator
-
-### 3. Mengapa pada nested navigator header Tab perlu `headerShown: false`
-
-Saat `Bottom Tab` diletakkan di dalam `Drawer`, header dari Tab tidak perlu tampil jika header utama sudah dipegang oleh navigator lain atau screen di dalamnya.
-
-Jika `headerShown: false` tidak diset:
-
-- bisa muncul header ganda
-- judul layar menjadi bertumpuk
-- ruang vertikal konten berkurang
-- tampilan terlihat tidak rapi
-
-Pada implementasi ini, `Beranda` di `Drawer` menyembunyikan header untuk container tab agar navigasi internal di Tab dan Stack bisa mengontrol tampilan secara lebih bersih.
-
-### 4. Deskripsi struktur navigasi aplikasi
-
-Struktur navigasi aplikasi terdiri dari tiga lapisan:
-
-1. Lapisan pertama: `Drawer Navigator`
-   Berfungsi sebagai navigasi global aplikasi.
-2. Lapisan kedua: `Bottom Tab Navigator`
-   Berada di dalam menu `Beranda` untuk fitur akademik utama.
-3. Lapisan ketiga: `Native Stack Navigator`
-   Berada di dalam tab `Mata Kuliah` untuk alur daftar ke detail.
-
-Alasan memakai tiga lapisan:
-
-- kebutuhan menu global berbeda dengan kebutuhan tab fitur
-- alur daftar ke detail paling tepat diwakili stack
-- nested navigator membuat struktur aplikasi modular dan mudah dikembangkan
-
-## File Penting
-
-- [App.tsx](./App.tsx): seluruh implementasi navigasi, data contoh, screen, state UI, dan style
-- [babel.config.js](./babel.config.js): konfigurasi Babel dan plugin Reanimated
-- [app.json](./app.json): konfigurasi Expo app
-- [package.json](./package.json): daftar dependency aplikasi
-- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md): dokumentasi arsitektur mendalam
-
-## Verifikasi
-
-Pemeriksaan yang sudah dijalankan:
-
-```bash
-npx expo install --check
-npx tsc --noEmit
-```
-
-Keduanya berhasil.
-
-## Troubleshooting Expo 55
-
-### Diagnosis utama: mismatch native dan JavaScript pada Reanimated
-
-Penyebab error `NativeWorklets... installTurboModule` yang sempat muncul pada proyek ini adalah ketidaksesuaian antara layer JavaScript dan native pada stack Reanimated di Expo 55.
-
-Kondisi awal yang memicu error:
+Kondisi yang pernah memicu error:
 
 - `react-native-reanimated@4.2.1` sudah terpasang
-- peer native yang dibutuhkan, yaitu `react-native-worklets`, belum terpasang
-- Metro masih dapat memuat cache atau binding lama yang tidak sesuai
+- `react-native-worklets` sebagai peer dependency belum tersedia
 
-Perbaikan yang sudah diterapkan pada repo ini:
+Perbaikan yang diterapkan:
 
-- menambahkan `react-native-worklets` pada `package.json`
-- menambahkan `expo-font` sebagai peer yang dibutuhkan `@expo/vector-icons`
-- merapikan `app.json` dengan menghapus key yang tidak valid untuk SDK 55
-- menambahkan `dist` ke `exclude` pada `tsconfig.json` agar pemeriksaan TypeScript stabil
+- menambahkan `react-native-worklets`
+- menambahkan `expo-font`
+- merapikan konfigurasi pada `app.json`
+- mengecualikan `dist` pada `tsconfig.json`
 
-Verifikasi setelah perbaikan:
+### 10.2 Error `back-icon@3x.png could not be found`
 
-```bash
-npx expo-doctor
-npx tsc --noEmit
-```
+Masalah ini diatasi dengan mengganti `@react-navigation/stack` ke `@react-navigation/native-stack`, sehingga jalur asset header berbasis JavaScript tidak lagi dipakai.
 
-Keduanya berhasil saat perbaikan dilakukan.
+### 10.3 Warning `Project is incompatible with this version of Expo Go`
 
-### Error `back-icon@3x.png could not be found`
-
-Masalah ini sudah ditangani pada repo ini dengan mengganti `@react-navigation/stack` ke `@react-navigation/native-stack`.
-
-Alasan teknis:
-
-- `@react-navigation/stack` memakai header stack berbasis JavaScript
-- pada kombinasi Metro dan Expo 55, jalur asset header dari `@react-navigation/elements` dapat memicu error resolusi asset
-- `native-stack` lebih ringan dan lebih stabil untuk kebutuhan daftar ke detail pada aplikasi ini
-
-### Warning `Project is incompatible with this version of Expo Go`
-
-Ini bukan bug kode aplikasi. Artinya versi Expo Go pada perangkat Anda lebih lama daripada SDK proyek.
+Warning ini berarti versi Expo Go di perangkat lebih lama daripada SDK proyek.
 
 Solusi:
 
-- update Expo Go ke versi terbaru dari Play Store
-- lalu jalankan ulang `npx expo start --clear`
-- jika Anda memakai development build, lakukan rebuild native app karena dependency native telah berubah
+- perbarui Expo Go ke versi terbaru
+- jalankan ulang aplikasi dengan `npx expo start --clear`
+- jika menggunakan development build, lakukan rebuild native app
 
-### Warning `SafeAreaView has been deprecated`
+### 10.4 Warning `SafeAreaView has been deprecated`
 
-Sudah diperbaiki di kode aplikasi dengan memakai `SafeAreaView` dari `react-native-safe-area-context`.
+Pada proyek ini, safe area telah dipindahkan ke `react-native-safe-area-context`, sehingga warning tersebut sudah diatasi pada implementasi.
 
-### Warning `InteractionManager has been deprecated`
+### 10.5 Warning `InteractionManager has been deprecated`
 
-Warning ini berasal dari dependency internal yang berjalan pada development mode. Selama bundling dan navigasi aplikasi normal, warning ini tidak memblokir aplikasi.
+Warning ini berasal dari dependency internal pada mode development dan tidak memblokir jalannya aplikasi.
 
-### Warning `[Reanimated] Reduced motion setting is enabled`
+### 10.6 Warning `[Reanimated] Reduced motion setting is enabled`
 
-Warning ini muncul karena perangkat mengaktifkan pengaturan reduced motion. Pada mode development, Reanimated akan menonaktifkan sebagian animasi. Warning ini tidak memblokir aplikasi.
+Warning ini muncul saat perangkat mengaktifkan reduced motion. Efeknya hanya pada sebagian animasi di mode development.
 
-### Langkah aman saat aplikasi gagal berjalan setelah update dependency
+### 10.7 Langkah aman setelah update dependency
 
-Gunakan urutan berikut pada folder proyek:
+Gunakan langkah berikut:
 
 ```bash
 npm install
@@ -382,6 +457,26 @@ npx expo start --clear
 
 Lalu pastikan:
 
-- Expo Go pada perangkat sudah versi terbaru
-- aplikasi Expo Go ditutup penuh lalu dibuka kembali
-- jika memakai development build, aplikasi native dibangun ulang
+- Expo Go sudah versi terbaru
+- Expo Go ditutup penuh lalu dibuka kembali
+- development build dibangun ulang bila dependency native berubah
+
+## 11. Verifikasi
+
+Pemeriksaan yang relevan untuk proyek ini:
+
+```bash
+npx expo install --check
+npx expo-doctor
+npx tsc --noEmit
+```
+
+## 12. File Penting
+
+- [App.tsx](./App.tsx): implementasi utama screen, navigator, context, data, dan style
+- [index.ts](./index.ts): registrasi root component
+- [app.json](./app.json): konfigurasi Expo
+- [babel.config.js](./babel.config.js): konfigurasi Babel dan plugin Reanimated
+- [tsconfig.json](./tsconfig.json): konfigurasi TypeScript
+- [package.json](./package.json): daftar dependency dan script proyek
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md): dokumentasi arsitektur teknis
