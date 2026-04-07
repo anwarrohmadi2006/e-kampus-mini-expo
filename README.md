@@ -4,12 +4,17 @@ Aplikasi kampus mini berbasis Expo dan React Native untuk memenuhi tugas navigas
 
 ## Ringkasan
 
-Referensi visual diambil dari:
+Referensi visual yang digunakan pada pengembangan aplikasi berasal dari paket desain `stitch` dan telah disalin ke dalam repositori ini agar dapat ditinjau langsung tanpa bergantung pada path lokal.
 
-- `C:\Users\user\Downloads\E Campus 2\stitch\stitch\daftar_mata_kuliah`
-- `C:\Users\user\Downloads\E Campus 2\stitch\stitch\jadwal_kuliah_mingguan`
-- `C:\Users\user\Downloads\E Campus 2\stitch\stitch\profil_mahasiswa`
-- `C:\Users\user\Downloads\E Campus 2\stitch\stitch\scholar_metric\DESIGN.md`
+Referensi yang disertakan dalam repo:
+
+- [Daftar Mata Kuliah - HTML](./docs/references/daftar_mata_kuliah/code.html)
+- [Daftar Mata Kuliah - Screenshot](./docs/references/daftar_mata_kuliah/screen.png)
+- [Jadwal Kuliah Mingguan - HTML](./docs/references/jadwal_kuliah_mingguan/code.html)
+- [Jadwal Kuliah Mingguan - Screenshot](./docs/references/jadwal_kuliah_mingguan/screen.png)
+- [Profil Mahasiswa - HTML](./docs/references/profil_mahasiswa/code.html)
+- [Profil Mahasiswa - Screenshot](./docs/references/profil_mahasiswa/screen.png)
+- [Scholar Metric - Design Notes](./docs/references/scholar_metric/DESIGN.md)
 
 Adaptasi yang diterapkan ke Expo:
 
@@ -104,30 +109,30 @@ Dokumentasi arsitektur lengkap ada di [docs/ARCHITECTURE.md](./docs/ARCHITECTURE
 
 ## Pemetaan Spesifikasi Wajib
 
-### 14. Drawer berisi Beranda, Jadwal Kuliah, Pengumuman, Tentang Kampus
+### 1. Implementasi Drawer Navigator
 
-Sudah diimplementasikan pada `Drawer.Navigator` di [App.tsx](./App.tsx).
+Aplikasi telah mengimplementasikan `Drawer.Navigator` sebagai navigasi utama. Menu yang tersedia terdiri atas `Beranda`, `Jadwal Kuliah`, `Pengumuman`, dan `Tentang Kampus`. Implementasi ini berada pada [App.tsx](./App.tsx).
 
-### 15. Tab Beranda berisi Mata Kuliah, Nilai, Profil Mahasiswa
+### 2. Implementasi Bottom Tab pada Halaman Beranda
 
-Sudah diimplementasikan pada `Tab.Navigator` di [App.tsx](./App.tsx).
+Halaman `Beranda` telah memuat `Bottom Tab Navigator` dengan tiga tab utama, yaitu `Mata Kuliah`, `Nilai`, dan `Profil Mahasiswa`. Struktur ini diterapkan pada `Tab.Navigator` di [App.tsx](./App.tsx).
 
-### 16. Tab Mata Kuliah menggunakan Stack: daftar MK ke detail MK
+### 3. Implementasi Stack pada Tab Mata Kuliah
 
-Sudah diimplementasikan pada `CourseStack.Navigator`.
+Tab `Mata Kuliah` telah menggunakan `Stack Navigator` untuk mendukung alur berpindah dari daftar mata kuliah menuju halaman detail. Implementasi ini berada pada `CourseStack.Navigator`.
 
-Halaman detail menampilkan:
+Halaman detail mata kuliah menampilkan informasi berikut:
 
 - nama mata kuliah
 - jumlah SKS
-- dosen
-- jadwal
+- dosen pengampu
+- jadwal perkuliahan
 - ruangan
 - deskripsi singkat
 
-### 17. Halaman Profil Mahasiswa menampilkan data diri lengkap
+### 4. Implementasi Halaman Profil Mahasiswa
 
-Sudah diimplementasikan pada `ProfileScreen` dan menampilkan:
+Halaman `Profil Mahasiswa` telah menampilkan data diri mahasiswa secara lengkap melalui `ProfileScreen`. Informasi yang ditampilkan meliputi:
 
 - nama
 - NIM
@@ -138,12 +143,12 @@ Sudah diimplementasikan pada `ProfileScreen` dan menampilkan:
 - alamat
 - semester
 - status akademik
-- SKS lulus
+- jumlah SKS lulus
 - IPK
 
-### 18. Halaman Jadwal Kuliah menampilkan tabel jadwal mingguan
+### 5. Implementasi Halaman Jadwal Kuliah Mingguan
 
-Sudah diimplementasikan pada `ScheduleScreen` dalam bentuk kolom harian:
+Halaman `Jadwal Kuliah` telah menampilkan jadwal mingguan melalui `ScheduleScreen`. Jadwal disusun dalam bentuk kolom harian untuk:
 
 - Senin
 - Selasa
@@ -151,7 +156,7 @@ Sudah diimplementasikan pada `ScheduleScreen` dalam bentuk kolom harian:
 - Kamis
 - Jumat
 
-Setiap kolom menampilkan jam, mata kuliah, ruangan, dan dosen.
+Pada setiap kolom, informasi yang ditampilkan mencakup jam kuliah, nama mata kuliah, ruangan, dan dosen.
 
 ## Tantangan Bonus
 

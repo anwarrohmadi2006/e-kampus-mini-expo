@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profil Mahasiswa - E-Kampus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#7b2e12",
+                        "surface-container": "#eeeef0",
+                        "tertiary-container": "#5c1800",
+                        "on-secondary-fixed-variant": "#544600",
+                        "primary": "#000666",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9fb",
+                        "inverse-surface": "#2f3132",
+                        "on-error": "#ffffff",
+                        "outline": "#767683",
+                        "tertiary-fixed": "#ffdbd0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#343d96",
+                        "on-secondary-fixed": "#221b00",
+                        "on-background": "#1a1c1d",
+                        "outline-variant": "#c6c5d4",
+                        "surface-tint": "#4c56af",
+                        "surface-bright": "#f9f9fb",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-surface-variant": "#454652",
+                        "primary-fixed": "#e0e0ff",
+                        "on-primary-container": "#8690ee",
+                        "primary-container": "#1a237e",
+                        "secondary-container": "#fcd400",
+                        "inverse-primary": "#bdc2ff",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-dim": "#d9dadc",
+                        "secondary-fixed-dim": "#e9c400",
+                        "surface-container-low": "#f3f3f5",
+                        "secondary-fixed": "#ffe16d",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#e17c5a",
+                        "on-primary-fixed": "#000767",
+                        "background": "#f9f9fb",
+                        "surface-container-highest": "#e2e2e4",
+                        "secondary": "#705d00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1d",
+                        "inverse-on-surface": "#f0f0f2",
+                        "tertiary": "#380b00",
+                        "on-secondary-container": "#6e5c00",
+                        "surface-variant": "#e2e2e4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bdc2ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased pb-28">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9fb]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#000666]">menu</span>
+<span class="text-lg font-bold text-[#000666] font-['Inter'] tracking-tight">E-Kampus</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="Close up portrait of a young professional man with short dark hair in a clean minimal studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSHKkmXR7IN2pq2y0cyJ0R_ueAJLADcXQkaRjxki8etgr-QW0zl2D5VGr2UpLx2BQCGtk7TrdIp-WKYa0YUGbXzSBVKUs-cFoPdhpZeuchDDZJQdphvTsH-O8Xw3q76vERZqy8Bq0RPdCzwDUBkZBhY4pmYJuNHfxuiHFhBtvs03SqOYNNbRPl0ZskFMkIORQxXtg-3UvZ3M0DUQ_J--PNJMCk-XMqvzrr0vpBTASxmS5cb6l5ApaxrFr3lCD_yo00qYs-IcWT5hNf"/>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- Profile Hero Card (Bento Style) -->
+<div class="relative overflow-hidden bg-primary-container rounded-xl shadow-[0_8px_24px_rgba(26,28,29,0.06)] p-8 text-white mb-8">
+<!-- Decorative Accent Gradient -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary-fixed opacity-10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+<div class="relative flex flex-col md:flex-row items-center gap-8">
+<!-- Avatar with Academic Accent -->
+<div class="relative">
+<div class="w-32 h-32 rounded-full border-4 border-secondary-fixed/30 p-1">
+<img alt="Student Avatar" class="w-full h-full object-cover rounded-full" data-alt="Professional headshot of a young male student looking confident against a neutral architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5-lJ0UBXchjOlCAECuDXEFJOp7CvWC6GzX4brm7tnLwQm9QZYur4MSW-tUxXsJ6jRqhzBls-V1rqH6QoyasyCoNpkIcSkk74vkIdTUIdVYJjXjJUez4UT9QxpVFfj_lud6Aj447oygeIKwguqSNzMBvvtBMGFYQG90IUbsBLjlAPDvGFJxFGIRKWLzXNolWRmSaTaAYP9ujUJeVj4FesoNspF1v392Ab8Ctw1r6a-EoDYu21hO5l3xvdha3vduKEkmY-JCJ9UjP5c"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-secondary-fixed text-on-secondary-fixed font-bold px-3 py-1 rounded-full text-sm shadow-lg">
+                        ID: 2023-0451
+                    </div>
+</div>
+<div class="text-center md:text-left flex-1">
+<h1 class="text-3xl font-extrabold tracking-tight mb-1">Rizky Pratama</h1>
+<p class="text-primary-fixed-dim text-lg font-medium opacity-90 mb-4 uppercase tracking-widest text-[12px]">Informatika</p>
+<div class="inline-flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
+<span class="material-symbols-outlined text-secondary-fixed mr-2" style="font-variation-settings: 'FILL' 1;">grade</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-white/60 leading-none">IPK Kumulatif</span>
+<span class="text-2xl font-black text-white">3.85</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Information Sections (Editorial Layout) -->
+<div class="space-y-10">
+<!-- Academic Status Section -->
+<section>
+<div class="flex items-center justify-between mb-4 px-2">
+<h2 class="text-sm font-bold uppercase tracking-widest text-outline">Status Akademik</h2>
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">AKTIF</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-5 rounded-xl">
+<span class="text-[10px] uppercase font-bold text-outline block mb-1">Semester</span>
+<span class="text-xl font-bold text-on-surface">5 (Lima)</span>
+</div>
+<div class="bg-surface-container-low p-5 rounded-xl">
+<span class="text-[10px] uppercase font-bold text-outline block mb-1">SKS Lulus</span>
+<span class="text-xl font-bold text-on-surface">92 SKS</span>
+</div>
+</div>
+</section>
+<!-- Personal Details List -->
+<section>
+<h2 class="text-sm font-bold uppercase tracking-widest text-outline mb-6 px-2">Data Diri</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Email Item -->
+<div class="flex items-center p-5 hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-primary">mail</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-outline leading-none mb-1">Email Kampus</span>
+<span class="text-sm font-medium text-on-surface">rizky.pratama@student.univ.ac.id</span>
+</div>
+</div>
+<!-- Dividerless Separation (Tonal Shift) -->
+<div class="h-[1px] bg-surface-container-highest mx-5"></div>
+<!-- Phone Item -->
+<div class="flex items-center p-5 hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-primary">call</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-outline leading-none mb-1">Nomor HP</span>
+<span class="text-sm font-medium text-on-surface">+62 812-3456-7890</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-highest mx-5"></div>
+<!-- Address Item -->
+<div class="flex items-center p-5 hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-primary">location_on</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-outline leading-none mb-1">Alamat</span>
+<span class="text-sm font-medium text-on-surface leading-relaxed">Jl. Pendidikan No. 42, Jakarta Selatan</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="pb-10">
+<button class="w-full bg-surface-container-highest text-primary font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-outline-variant/30 transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+                    Ubah Profil
+                </button>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#f9f9fb]/80 backdrop-blur-xl shadow-[0_-8px_24px_rgba(26,28,29,0.06)] rounded-t-2xl z-50">
+<!-- Courses Tab -->
+<div class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 transition-transform hover:opacity-80 active:scale-90">
+<span class="material-symbols-outlined mb-1">school</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase">Courses</span>
+</div>
+<!-- Grades Tab -->
+<div class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 transition-transform hover:opacity-80 active:scale-90">
+<span class="material-symbols-outlined mb-1">grade</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase">Grades</span>
+</div>
+<!-- Profile Tab (ACTIVE) -->
+<div class="flex flex-col items-center justify-center bg-[#1A237E] text-[#ffffff] rounded-full px-5 py-1.5 transition-transform active:scale-90">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase">Profile</span>
+</div>
+</nav>
+</body></html>

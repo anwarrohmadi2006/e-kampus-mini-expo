@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jadwal Kuliah - E-Kampus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#7b2e12",
+                    "surface-container": "#eeeef0",
+                    "tertiary-container": "#5c1800",
+                    "on-secondary-fixed-variant": "#544600",
+                    "primary": "#000666",
+                    "error-container": "#ffdad6",
+                    "surface": "#f9f9fb",
+                    "inverse-surface": "#2f3132",
+                    "on-error": "#ffffff",
+                    "outline": "#767683",
+                    "tertiary-fixed": "#ffdbd0",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#343d96",
+                    "on-secondary-fixed": "#221b00",
+                    "on-background": "#1a1c1d",
+                    "outline-variant": "#c6c5d4",
+                    "surface-tint": "#4c56af",
+                    "surface-bright": "#f9f9fb",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "on-surface-variant": "#454652",
+                    "primary-fixed": "#e0e0ff",
+                    "on-primary-container": "#8690ee",
+                    "primary-container": "#1a237e",
+                    "secondary-container": "#fcd400",
+                    "inverse-primary": "#bdc2ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e8e8ea",
+                    "surface-dim": "#d9dadc",
+                    "secondary-fixed-dim": "#e9c400",
+                    "surface-container-low": "#f3f3f5",
+                    "secondary-fixed": "#ffe16d",
+                    "on-tertiary-fixed": "#390c00",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#e17c5a",
+                    "on-primary-fixed": "#000767",
+                    "background": "#f9f9fb",
+                    "surface-container-highest": "#e2e2e4",
+                    "secondary": "#705d00",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1d",
+                    "inverse-on-surface": "#f0f0f2",
+                    "tertiary": "#380b00",
+                    "on-secondary-container": "#6e5c00",
+                    "surface-variant": "#e2e2e4",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#bdc2ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9fb]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#e2e2e4]/50 rounded-full transition-all duration-300">
+<span class="material-symbols-outlined text-[#000666]">menu</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight text-[#000666]">E-Kampus</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center gap-6 mr-4">
+<span class="text-sm font-medium text-[#5a5d5e] hover:text-[#000666] cursor-pointer">Dashboard</span>
+<span class="text-sm font-bold text-[#000666] border-b-2 border-[#1A237E]">Schedule</span>
+<span class="text-sm font-medium text-[#5a5d5e] hover:text-[#000666] cursor-pointer">Library</span>
+</div>
+<img alt="User profile photo" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container/20" data-alt="Close-up studio portrait of a confident male student with a friendly expression and neat hairstyle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjFmGfKE8psrU-9LL1sWrC_Q3cSUb2SdkJivqy0KA_Z5JpO5jhdMwUZJ1s_djRMd_lqo_u5M9VxGX1TgU0T2F1ZZHruaGaxDW2fbFOSAlZm3qBohTLnTD8CySWoCq4M-Z1H-ZbjNzFEpB4Ptws9bFSkFcbJ96ZSBtktp1f_tlykJH0_A70k2p9OtsR0XkT82Q6q5tliM8CXBX2YXEoqwOw7mTxzBYr7jlIFGwSH0lAxOHVlGpZsjtEqOE55SrIC7EaQpCSLAbQxiYC"/>
+</div>
+</header>
+<div class="flex pt-16 min-h-screen">
+<!-- NavigationDrawer (Desktop Only) -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-64px)] w-80 p-6 bg-[#f9f9fb] sticky top-16">
+<div class="mb-8 flex flex-col gap-2">
+<div class="flex items-center gap-4 mb-4">
+<img alt="Student Avatar" class="w-12 h-12 rounded-full object-cover" data-alt="Professional headshot of a young male university student for academic profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoG8RiDkYV9u8CiZ70ZdOER2CMrYxp-wDxzmQq5kuThg2L8Hns_i0gmnnUbOzVymBdi4hLfecFlPUxjjlxjNwyd22qD2Q_my-ClObmTT46-tmBXoadQc1PRbrX3Zdix1M3o0zanBE958lU7zEowbG98GuPKO9fYUWSyIuaYuj4cgqch-nFFqOsCZ49XbZarRMWcqSVlUPMRXPv-blWZIBvgHq9xGrFdVYboPOGJ_LRgiFgKvxLOkyJn1aoKKvdgWKuVYcDOtcbZ-kL"/>
+<div>
+<p class="font-bold text-[#000666] text-sm">Modern Scholar</p>
+<p class="text-xs text-outline">Computer Science Dept.</p>
+<p class="text-[10px] text-outline font-mono">ID: 2023-0451</p>
+</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-[#1A237E]/10 text-[#1A237E] rounded-xl transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-medium text-sm">Schedule</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-medium text-sm">Announcements</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">local_library</span>
+<span class="font-medium text-sm">Library</span>
+</a>
+<div class="pt-4 mt-4 border-t border-surface-container-highest">
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 px-6 py-8 md:px-12 lg:px-16 bg-surface">
+<!-- Header Section -->
+<div class="mb-10">
+<span class="text-[10px] font-extrabold tracking-[0.2em] uppercase text-secondary mb-2 block">Semester Ganjil 2023/2024</span>
+<h2 class="text-4xl font-extrabold text-primary tracking-tight mb-4">Jadwal Kuliah</h2>
+<div class="flex gap-2 hide-scrollbar overflow-x-auto pb-2">
+<button class="px-5 py-2 rounded-full bg-primary text-on-primary text-sm font-semibold whitespace-nowrap">Week View</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-semibold whitespace-nowrap">Exam Schedule</button>
+</div>
+</div>
+<!-- Bento Schedule Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+<!-- Monday -->
+<section class="flex flex-col gap-4">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-primary">Senin</h3>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">24 Okt</span>
+</div>
+<div class="group p-5 rounded-xl bg-surface-container-lowest border-l-4 border-primary shadow-sm hover:shadow-md transition-all">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded">08:00 - 10:30</span>
+<span class="material-symbols-outlined text-outline text-sm">more_vert</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 leading-tight">Struktur Data &amp; Algoritma</h4>
+<div class="flex items-center gap-2 text-xs text-outline mb-3">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Lab Komputer 302</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="text-[10px] font-bold text-on-secondary-fixed">DS</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant italic">Dr. Irwan Santoso</span>
+</div>
+</div>
+<div class="p-5 rounded-xl bg-surface-container-low border-l-4 border-outline-variant opacity-80">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-surface-container-highest text-outline rounded">13:00 - 15:30</span>
+</div>
+<h4 class="font-bold text-on-surface-variant mb-1 leading-tight">Matematika Diskrit</h4>
+<div class="flex items-center gap-2 text-xs text-outline">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Gedung B R.401</span>
+</div>
+</div>
+</section>
+<!-- Tuesday -->
+<section class="flex flex-col gap-4">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-primary">Selasa</h3>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">25 Okt</span>
+</div>
+<div class="p-5 rounded-xl bg-surface-container-lowest border-l-4 border-secondary shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-secondary-fixed text-on-secondary-fixed rounded">09:00 - 11:30</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 leading-tight">Sistem Operasi</h4>
+<div class="flex items-center gap-2 text-xs text-outline mb-3">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Gedung C R.202</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="text-[10px] font-bold text-on-primary-fixed">AM</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant italic">Prof. Andi M.</span>
+</div>
+</div>
+</section>
+<!-- Wednesday -->
+<section class="flex flex-col gap-4">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-primary">Rabu</h3>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">26 Okt</span>
+</div>
+<div class="p-5 rounded-xl bg-surface-container-lowest border-l-4 border-primary shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded">08:00 - 10:30</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 leading-tight">Pemrograman Web</h4>
+<div class="flex items-center gap-2 text-xs text-outline mb-3">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Lab Multimedia</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center">
+<span class="text-[10px] font-bold text-on-secondary-fixed">RK</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant italic">Rina Kusuma M.Sc</span>
+</div>
+</div>
+<div class="p-5 rounded-xl bg-surface-container-lowest border-l-4 border-primary shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded">14:00 - 16:30</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 leading-tight">Basis Data</h4>
+<div class="flex items-center gap-2 text-xs text-outline mb-3">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Lab Komputer 301</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="text-[10px] font-bold text-on-surface-variant">HS</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant italic">Heri Setiawan</span>
+</div>
+</div>
+</section>
+<!-- Thursday -->
+<section class="flex flex-col gap-4">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-primary">Kamis</h3>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">27 Okt</span>
+</div>
+<div class="p-8 rounded-xl bg-[#e2e2e4] border-2 border-dashed border-outline-variant flex flex-col items-center justify-center text-center opacity-60">
+<span class="material-symbols-outlined text-outline mb-2">event_busy</span>
+<p class="text-[10px] font-bold text-outline uppercase tracking-wider">No Classes</p>
+<p class="text-[9px] text-outline italic">Self-study day</p>
+</div>
+</section>
+<!-- Friday -->
+<section class="flex flex-col gap-4">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-primary">Jumat</h3>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">28 Okt</span>
+</div>
+<div class="p-5 rounded-xl bg-surface-container-lowest border-l-4 border-error shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold px-2 py-1 bg-error-container text-on-error-container rounded">09:00 - 11:30</span>
+<span class="material-symbols-outlined text-error text-xs" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 leading-tight">Etika Profesi</h4>
+<p class="text-[9px] text-error font-bold mb-3 uppercase">Pindah ke R. Aula Utama</p>
+<div class="flex items-center gap-2 text-xs text-outline mb-3">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>Gedung A lt.1</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Additional Context Section (Editorial feel) -->
+<div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="relative overflow-hidden rounded-3xl h-64 group">
+<img alt="Campus Library" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Interior of a modern academic library with tall bookshelves, natural light through large windows, and students studying at clean minimalist desks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2M4DLZ-asCuDB8EsDnxZrmfIKE9-82ddH0kbyncdmecvD1038AjpCk15VZJVCst2j4FCYN-XXuVBmOBS2JMwL3N5SpbWI1UInMxV15R_W3CfeN55ANSwS41UgdqBrDnHIMWdbZ_xXz8ih1KKW3qhsxkyoRRf5THG2h9W4hgETLogXzB34l--vuegm2DtL9vJyYWy_pZ2Wa1YH1m0DqPt5leYKLp4TYtB9G_M0bpEHH1ajvZ--f99kDso_Zissz6NEkdfaAMhnxrif"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h4 class="text-white font-bold text-2xl mb-2">Weekly Summary</h4>
+<p class="text-primary-fixed text-sm opacity-90 max-w-xs">Total 12 SKS, 5 Mata Kuliah. Pastikan semua tugas praktikum sudah diunggah sebelum tenggat waktu Jumat malam.</p>
+</div>
+</div>
+<div class="bg-secondary-fixed p-8 rounded-3xl flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-on-secondary-fixed">auto_awesome</span>
+<span class="text-[10px] font-extrabold uppercase tracking-widest text-on-secondary-fixed opacity-70">Scholar Tip</span>
+</div>
+<h4 class="text-on-secondary-fixed font-bold text-2xl mb-4 leading-tight">Optimalkan Waktu Luang di Hari Kamis untuk Riset Skripsi.</h4>
+</div>
+<button class="bg-primary text-white px-6 py-3 rounded-full text-sm font-bold w-fit hover:opacity-90 transition-all">Lihat Resources</button>
+</div>
+</div>
+<!-- Bottom spacing for mobile nav -->
+<div class="h-24 lg:hidden"></div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#f9f9fb]/80 backdrop-blur-xl rounded-t-2xl z-50 shadow-[0_-8px_24px_rgba(26,28,29,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 hover:opacity-80 transition-transform active:scale-90">
+<span class="material-symbols-outlined">school</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Courses</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#1A237E] text-[#ffffff] rounded-full px-5 py-1.5 transition-transform active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Schedule</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 hover:opacity-80 transition-transform active:scale-90">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

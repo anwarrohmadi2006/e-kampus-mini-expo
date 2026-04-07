@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E-Kampus - Daftar Mata Kuliah</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#7b2e12",
+                        "surface-container": "#eeeef0",
+                        "tertiary-container": "#5c1800",
+                        "on-secondary-fixed-variant": "#544600",
+                        "primary": "#000666",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9fb",
+                        "inverse-surface": "#2f3132",
+                        "on-error": "#ffffff",
+                        "outline": "#767683",
+                        "tertiary-fixed": "#ffdbd0",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#343d96",
+                        "on-secondary-fixed": "#221b00",
+                        "on-background": "#1a1c1d",
+                        "outline-variant": "#c6c5d4",
+                        "surface-tint": "#4c56af",
+                        "surface-bright": "#f9f9fb",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-surface-variant": "#454652",
+                        "primary-fixed": "#e0e0ff",
+                        "on-primary-container": "#8690ee",
+                        "primary-container": "#1a237e",
+                        "secondary-container": "#fcd400",
+                        "inverse-primary": "#bdc2ff",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-dim": "#d9dadc",
+                        "secondary-fixed-dim": "#e9c400",
+                        "surface-container-low": "#f3f3f5",
+                        "secondary-fixed": "#ffe16d",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#e17c5a",
+                        "on-primary-fixed": "#000767",
+                        "background": "#f9f9fb",
+                        "surface-container-highest": "#e2e2e4",
+                        "secondary": "#705d00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1d",
+                        "inverse-on-surface": "#f0f0f2",
+                        "tertiary": "#380b00",
+                        "on-secondary-container": "#6e5c00",
+                        "surface-variant": "#e2e2e4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bdc2ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9fb;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9fb]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#e2e2e4]/50 rounded-full transition-all duration-300 ease-in-out">
+<span class="material-symbols-outlined text-[#000666]">menu</span>
+</button>
+<h1 class="text-lg font-bold text-[#000666] tracking-tight">E-Kampus</h1>
+</div>
+<div class="flex items-center gap-4">
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed" data-alt="Close-up portrait of a professional male student in a clean modern campus setting, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHK2FYds34RDTanAO1F4xSKeWZo72P0APnLOZcOR_kj3nlzzF84QyNCOQT_7ivosYaMR8uJwmhNpcx6raB2YdCGu-TWqLIXbMBWSTQQO3xrvFT7SMHSi4dP0vlexdG-9fIAMGOXYQnu4_69jEVECvDE2TzpYfl_thWmZLrJqFi5YA7lyzEGYoKEUahUOhDG3cR95K196g_Yd1q_ZHoM8z_4k1nQ8McDFqM0NSZNbxHiR0Vv2-RiXtTvDDiKAmEm61Ofm8C6DWKm75M"/>
+</div>
+</header>
+<div class="flex min-h-screen pt-16 pb-24">
+<!-- NavigationDrawer (Visible on larger screens as requested) -->
+<aside class="hidden lg:flex flex-col h-screen fixed left-0 top-0 pt-20 w-80 bg-[#f9f9fb] shadow-2xl p-6 z-40 transition-colors duration-200">
+<div class="flex items-center gap-4 mb-8 p-4 bg-[#e2e2e4] rounded-3xl">
+<img alt="Student Avatar" class="w-12 h-12 rounded-full object-cover" data-alt="Professional headshot of a computer science student, clean look, soft focused background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNNvns48WFo0Wa2_nHZDds9tjm1I8fZ9mips-8LNKERdkKsIX6jQum9Wn6ZhomflBJbJpphtsy6X3ayDz4E3MYqHBjHLi173IDoYPnFkW_KRmguo_J4hFjNEb35Itfcsi80GprE5xAp67JKO0n6yanwUezogPJfNZ9eH05l_vj1p6K7uXdVU729ae8nKIIFacTPnbgM3EvEdUhmq4r3U6GAdWjznqHWvTobi1kGWQKw0ofTDyGHzkmNlk0nwZVbhmyLtLdCgUlFFCn"/>
+<div>
+<p class="font-bold text-[#000666] text-sm">Modern Scholar</p>
+<p class="text-xs text-[#5a5d5e]">Computer Science Dept.</p>
+<p class="text-[10px] text-[#5a5d5e] opacity-70">ID: 2023-0451</p>
+</div>
+</div>
+<nav class="space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 bg-[#1A237E]/10 text-[#1A237E] rounded-xl font-medium text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl font-medium text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span> Schedule
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl font-medium text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">campaign</span> Announcements
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl font-medium text-sm transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">local_library</span> Library
+                </a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#5a5d5e] hover:bg-[#e2e2e4] rounded-xl font-medium text-sm transition-colors duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+                </a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 lg:ml-80 px-6 py-8">
+<header class="mb-10">
+<div class="flex flex-col gap-1">
+<span class="text-xs font-bold tracking-[0.1em] text-secondary uppercase">Academic Year 2023/2024</span>
+<h2 class="text-4xl font-extrabold text-primary tracking-tight">Courses</h2>
+</div>
+<div class="mt-6 flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-medium">All Semester</button>
+<button class="px-6 py-2 bg-surface-container-highest text-on-surface-variant rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors">Semester 1</button>
+<button class="px-6 py-2 bg-surface-container-highest text-on-surface-variant rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors">Semester 2</button>
+</div>
+</header>
+<!-- Course Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Course Card: Algoritma -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(26,28,29,0.06)] hover:shadow-xl transition-all duration-300">
+<div class="absolute top-0 right-0 p-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed text-lg font-bold">A</span>
+</div>
+<div class="p-8 flex flex-col h-full">
+<div class="mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<h3 class="text-2xl font-bold text-primary mb-2 leading-tight">Algoritma</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span> Senin, 08:00 - 10:30
+                        </p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Female student profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrxXAu7QgOcf8jd-vSWBULQl2S8NRUpyvNhlQLxZoemnUbDrwJ_9gHS6--cEiqr-9qVXfduf1SXGNJ5OZShl06YpldqdNk9YnNQJ5QRoTSLScYv6LxGNkh63wsNkgV5dhwP4MpWZOjhpI4cKH_L42pQJ7Eo4MIacLLeFqkl6G4xcj1VzTxp_AXXfDxtf6_ylcP2yn4ajtHAfNtbBkyX1dZE8qxzJCzahwzdFE_FtWnD3jCLpOxd2cZ2A0O_FTqemwpBKzDXjQSbEAX"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Male student profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWKaMivqpsWcDfDaBhafvMKY9oT7X_p3KGSDlYIorO25oEbZW5m4vkO8llLj3p0eINtGveTaNbs-ubWjICdRvmI-VoVHgMi_iTBamboyEHu-xkd1h4bYLMaAAnpPWjYTOn_mstYrU6xOfiiRKet3RzXp4WXyEdO4pdk2OR0onpiZ8Fb3igiKSlXh3OB19j4JN4LZJeOdwyXrHYFJ0KMKo-QqQvh86W7nkfS332gn1lT_JFuFqIHQn3WAMHcImc3gFy_jRxEfsHsNV-"/>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+32</div>
+</div>
+<button class="p-3 bg-primary-container text-on-primary-container rounded-full hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Course Card: Basis Data -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(26,28,29,0.06)] hover:shadow-xl transition-all duration-300">
+<div class="absolute top-0 right-0 p-6">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed text-lg font-bold">A-</span>
+</div>
+<div class="p-8 flex flex-col h-full">
+<div class="mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">database</span>
+</div>
+<h3 class="text-2xl font-bold text-primary mb-2 leading-tight">Basis Data</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span> Selasa, 13:00 - 15:30
+                        </p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Portrait of male student for avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4LQBlxtJRcH9xLLBoMSPiqa8chvzhIWp_uudG_sqwjNDVSz6Q0cD_d_9jxPtW8p0K_S0g5NKUI2ovBe0-R2J3NtbIdImpGLbeP1FxUb7lF47O9o7PM_yNxO8GV4mez1-rIltZlf6HpqQguCVseahhMNxAAFHFYGdhFDi1910tSAnjcxKp7bZcfrMk1iYs4PhAd03z8X--MOMQYWqyJrJ4czPbAEhNoTScElFe3A1jauGjTUDsGkcw_qY1SFj2jMC0PHy_CaNa-XiY"/>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+45</div>
+</div>
+<button class="p-3 bg-primary-container text-on-primary-container rounded-full hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Course Card: Struktur Data -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(26,28,29,0.06)] hover:shadow-xl transition-all duration-300">
+<div class="absolute top-0 right-0 p-6 text-primary/20">
+<span class="material-symbols-outlined text-4xl">pending</span>
+</div>
+<div class="p-8 flex flex-col h-full">
+<div class="mb-4 text-secondary">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+</div>
+<h3 class="text-2xl font-bold text-primary mb-2 leading-tight">Struktur Data</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span> Rabu, 10:45 - 13:15
+                        </p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Portrait of female academic for avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9fUpHLCtQshyt5EdEJZivU2iq0MqJ7Uweytr1ktGwev6K9gDKL7xcx96PT_RHzUUXu2AishHgjrE7zFLgiVbnAC3Q4ms1s5UYhTUsY-wtNCUUOOxPZNGIcXNR2HknBRQpEkVhfdOxDj2SkO5fDq-0M_XA7HXOqejs6z-NYgqhs3L8VcMiRDRkurRqS1WEK984iJS1XbyQVdnCGMqmnCLaX_SsNCLZmrREmrgVHBFVUzJrqxu5YURDELh10VH8Vl6oQwZ-Ux0aEvji"/>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+28</div>
+</div>
+<button class="p-3 bg-primary-container text-on-primary-container rounded-full hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Course Card: Rekayasa Perangkat Lunak -->
+<div class="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(26,28,29,0.06)] hover:shadow-xl transition-all duration-300">
+<div class="absolute top-0 right-0 p-6 text-primary/20">
+<span class="material-symbols-outlined text-4xl">pending</span>
+</div>
+<div class="p-8 flex flex-col h-full">
+<div class="mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">engineering</span>
+</div>
+<h3 class="text-2xl font-bold text-primary mb-2 leading-tight">Rekayasa Perangkat Lunak</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span> Kamis, 08:00 - 10:30
+                        </p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+56</div>
+</div>
+<button class="p-3 bg-primary-container text-on-primary-container rounded-full hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full bg-[#f9f9fb]/80 backdrop-blur-xl flex justify-around items-center px-4 pb-6 pt-3 z-50 shadow-[0_-8px_24px_rgba(26,28,29,0.06)] md:hidden">
+<a class="flex flex-col items-center justify-center bg-[#1A237E] text-[#ffffff] rounded-full px-5 py-1.5 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Courses</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 hover:opacity-80 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">grade</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Grades</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#5a5d5e] px-5 py-1.5 hover:opacity-80 transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+<!-- Contextual FAB (Hidden as per relevance check on Details/Focused screens, but shown on Home/Dashboard) -->
+<button class="fixed right-6 bottom-28 md:bottom-10 bg-secondary-fixed text-on-secondary-fixed shadow-[0_8px_24px_rgba(112,93,0,0.2)] w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 z-40">
+<span class="material-symbols-outlined">add</span>
+</button>
+</body></html>
