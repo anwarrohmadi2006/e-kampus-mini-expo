@@ -33,6 +33,7 @@ Adaptasi yang diterapkan ke Expo:
 - `react-native-gesture-handler`
 - `react-native-reanimated`
 - `@expo/vector-icons`
+- `expo-image-picker`
 
 ## Audit Dependency
 
@@ -49,6 +50,7 @@ Dependency inti yang dipakai aplikasi:
 - `react-native-reanimated`: dependensi transitif untuk drawer dan animasi navigator
 - `react-native-worklets`: peer dependency yang dibutuhkan Reanimated di Expo 55
 - `expo-font`: peer dependency untuk `@expo/vector-icons`
+- `expo-image-picker`: memilih foto profil dari galeri perangkat
 
 Dependency yang dirampingkan:
 
@@ -72,6 +74,14 @@ Untuk membersihkan cache:
 ```bash
 npx expo start --clear
 ```
+
+## Pembaruan Terbaru
+
+- tombol sidebar tersedia di semua layar melalui tombol `menu` di kiri atas
+- tombol `back` muncul di kanan atas pada layar detail yang memiliki alur kembali
+- badge tab `Nilai` kini dinamis, mengikuti jumlah pembaruan nilai baru
+- badge `Nilai` otomatis hilang setelah tab `Nilai` dibuka
+- foto profil mahasiswa bisa diganti dari galeri dan tersinkron ke top bar, sidebar, dan halaman profil
 
 ## Struktur Navigasi
 
@@ -155,7 +165,25 @@ Sudah diterapkan pada `CourseDetailScreen` melalui `useLayoutEffect()` untuk men
 
 ### 3. Badge notifikasi tab
 
-Sudah diterapkan pada tab `Nilai` menggunakan `tabBarBadge: 3`.
+Sudah diterapkan pada tab `Nilai` menggunakan badge dinamis berbasis data nilai baru. Badge akan otomatis hilang setelah tab `Nilai` dibuka.
+
+### 4. Navigasi konsisten di semua layar
+
+Sudah diterapkan melalui top bar custom:
+
+- tombol `menu` di kiri atas membuka sidebar dari semua layar
+- tombol `back` muncul di kanan atas pada layar detail
+
+### 5. Ganti foto profil mahasiswa
+
+Sudah diterapkan pada `ProfileScreen` menggunakan `expo-image-picker`.
+
+Perilakunya:
+
+- pengguna dapat memilih foto dari galeri
+- foto baru langsung dipakai pada halaman profil
+- avatar pada top bar ikut berubah
+- avatar pada drawer ikut berubah
 
 ## Penjelasan Arsitektur
 
@@ -244,6 +272,7 @@ Alasan memakai tiga lapisan:
 - [App.tsx](./App.tsx): seluruh implementasi navigasi, data contoh, screen, dan style
 - [babel.config.js](./babel.config.js): konfigurasi Babel dan plugin Reanimated
 - [app.json](./app.json): konfigurasi Expo app
+- [package.json](./package.json): daftar dependency aplikasi
 - [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md): dokumentasi arsitektur mendalam
 
 ## Verifikasi

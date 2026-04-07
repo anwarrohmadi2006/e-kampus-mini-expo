@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import {
   NavigationContainer,
   RouteProp,
@@ -17,9 +18,10 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -41,6 +43,7 @@ type Course = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   accent: string;
   grade: string;
+  isNew?: boolean;
 };
 
 const COLORS = {
@@ -86,6 +89,7 @@ const COURSES: Course[] = [
     icon: 'console-line',
     accent: '#1A237E',
     grade: 'A',
+    isNew: true,
   },
   {
     id: 'basis-data',
@@ -99,6 +103,7 @@ const COURSES: Course[] = [
     icon: 'database-outline',
     accent: '#705D00',
     grade: 'A-',
+    isNew: true,
   },
   {
     id: 'rpl',
@@ -112,6 +117,7 @@ const COURSES: Course[] = [
     icon: 'cog-outline',
     accent: '#1A237E',
     grade: 'B+',
+    isNew: true,
   },
   {
     id: 'mobile',
@@ -127,6 +133,8 @@ const COURSES: Course[] = [
     grade: 'A',
   },
 ];
+
+const GRADE_NOTIFICATION_COUNT = COURSES.filter((course) => course.isNew).length;
 
 const WEEKLY_SCHEDULE = [
   [
@@ -160,6 +168,11 @@ type DrawerParamList = {
   TentangKampus: undefined;
 };
 
+type ProfileAvatarContextValue = {
+  avatarUri: string;
+  setAvatarUri: React.Dispatch<React.SetStateAction<string>>;
+};
+
 const theme: Theme = {
   dark: false,
   colors: {
@@ -181,63 +194,80 @@ const theme: Theme = {
 const Drawer = createDrawerNavigator<DrawerParamList>();
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 const CourseStack = createNativeStackNavigator<CourseStackParamList>();
+const ProfileAvatarContext = React.createContext<ProfileAvatarContextValue | undefined>(undefined);
+
+function useProfileAvatar() {
+  const context = React.useContext(ProfileAvatarContext);
+
+  if (!context) {
+    throw new Error('Profile avatar context is unavailable.');
+  }
+
+  return context;
+}
 
 export default function App() {
+  const [avatarUri, setAvatarUri] = useState(STUDENT.avatar);
+
   return (
-    <NavigationContainer theme={theme}>
-      <StatusBar style="dark" />
-      <Drawer.Navigator
-        initialRouteName="Beranda"
-        drawerContent={(props) => <CampusDrawerContent {...props} />}
-        screenOptions={{
-          headerStyle: styles.header,
-          headerTintColor: COLORS.primary,
-          headerTitleStyle: styles.headerTitle,
-          sceneStyle: { backgroundColor: COLORS.background },
-        }}
-      >
-        <Drawer.Screen
-          name="Beranda"
-          component={HomeTabs}
-          options={{
-            title: 'E-Kampus',
-            headerShown: false,
-            drawerIcon: ({ color, size }) => <Ionicons name="grid-outline" size={size} color={color} />,
+    <ProfileAvatarContext.Provider value={{ avatarUri, setAvatarUri }}>
+      <NavigationContainer theme={theme}>
+        <StatusBar style="dark" />
+        <Drawer.Navigator
+          initialRouteName="Beranda"
+          drawerContent={(props) => <CampusDrawerContent {...props} />}
+          screenOptions={{
+            headerStyle: styles.header,
+            headerTintColor: COLORS.primary,
+            headerTitleStyle: styles.headerTitle,
+            sceneStyle: { backgroundColor: COLORS.background },
           }}
-        />
-        <Drawer.Screen
-          name="JadwalKuliah"
-          component={ScheduleScreen}
-          options={{
-            title: 'Jadwal Kuliah',
-            headerShown: false,
-            drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
-          }}
-        />
-        <Drawer.Screen
-          name="Pengumuman"
-          component={AnnouncementsScreen}
-          options={{
-            title: 'Pengumuman',
-            headerShown: false,
-            drawerIcon: ({ color, size }) => <Ionicons name="megaphone-outline" size={size} color={color} />,
-          }}
-        />
-        <Drawer.Screen
-          name="TentangKampus"
-          component={AboutCampusScreen}
-          options={{
-            title: 'Tentang Kampus',
-            headerShown: false,
-            drawerIcon: ({ color, size }) => <Ionicons name="school-outline" size={size} color={color} />,
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+        >
+          <Drawer.Screen
+            name="Beranda"
+            component={HomeTabs}
+            options={{
+              title: 'E-Kampus',
+              headerShown: false,
+              drawerIcon: ({ color, size }) => <Ionicons name="grid-outline" size={size} color={color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="JadwalKuliah"
+            component={ScheduleScreen}
+            options={{
+              title: 'Jadwal Kuliah',
+              headerShown: false,
+              drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="Pengumuman"
+            component={AnnouncementsScreen}
+            options={{
+              title: 'Pengumuman',
+              headerShown: false,
+              drawerIcon: ({ color, size }) => <Ionicons name="megaphone-outline" size={size} color={color} />,
+            }}
+          />
+          <Drawer.Screen
+            name="TentangKampus"
+            component={AboutCampusScreen}
+            options={{
+              title: 'Tentang Kampus',
+              headerShown: false,
+              drawerIcon: ({ color, size }) => <Ionicons name="school-outline" size={size} color={color} />,
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </ProfileAvatarContext.Provider>
   );
 }
 
 function HomeTabs() {
+  const [unreadGradeCount, setUnreadGradeCount] = useState(GRADE_NOTIFICATION_COUNT);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -269,7 +299,13 @@ function HomeTabs() {
       <Tab.Screen
         name="Nilai"
         component={GradesScreen}
-        options={{ title: 'Nilai', tabBarBadge: 3 }}
+        options={{
+          title: 'Nilai',
+          tabBarBadge: unreadGradeCount > 0 ? unreadGradeCount : undefined,
+        }}
+        listeners={{
+          focus: () => setUnreadGradeCount(0),
+        }}
       />
       <Tab.Screen
         name="ProfilMahasiswa"
@@ -295,12 +331,17 @@ function CourseStackNavigator() {
         component={CourseListScreen}
         options={{ title: 'Mata Kuliah', headerShown: false }}
       />
-      <CourseStack.Screen name="CourseDetail" component={CourseDetailScreen} options={{ title: 'Detail Mata Kuliah' }} />
+      <CourseStack.Screen
+        name="CourseDetail"
+        component={CourseDetailScreen}
+        options={{ title: 'Detail Mata Kuliah', headerShown: false }}
+      />
     </CourseStack.Navigator>
   );
 }
 
 function CampusDrawerContent(props: DrawerContentComponentProps) {
+  const { avatarUri } = useProfileAvatar();
   const labelMap: Record<keyof DrawerParamList, string> = {
     Beranda: 'Beranda',
     JadwalKuliah: 'Jadwal Kuliah',
@@ -317,7 +358,7 @@ function CampusDrawerContent(props: DrawerContentComponentProps) {
   return (
     <SafeAreaView style={styles.drawerShell}>
       <View style={styles.drawerProfile}>
-        <Image source={{ uri: STUDENT.avatar }} style={styles.drawerAvatar} />
+        <Image source={{ uri: avatarUri }} style={styles.drawerAvatar} />
         <View style={{ flex: 1 }}>
           <Text style={styles.drawerName}>{STUDENT.name}</Text>
           <Text style={styles.drawerMeta}>{STUDENT.major}</Text>
@@ -434,6 +475,7 @@ function CourseDetailScreen({
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+      <ScreenTopBar title={course.name} eyebrow="Detail Mata Kuliah" showBack showAvatar={false} />
       <View style={styles.detailHero}>
         <View style={[styles.detailHeroIcon, { backgroundColor: `${course.accent}18` }]}>
           <MaterialCommunityIcons name={course.icon} size={36} color={course.accent} />
@@ -460,7 +502,7 @@ function GradesScreen() {
       <HeroBanner
         eyebrow="Academic Performance"
         title="Nilai Semester"
-        subtitle="Ringkasan nilai dibuat konsisten dengan hero editorial dan kartu tonal."
+        subtitle={`${GRADE_NOTIFICATION_COUNT} pembaruan nilai terbaru tersedia pada semester ini.`}
       />
       <View style={styles.summaryCard}>
         <View>
@@ -487,11 +529,43 @@ function GradesScreen() {
 }
 
 function ProfileScreen() {
+  const { avatarUri, setAvatarUri } = useProfileAvatar();
+
+  const handlePickProfilePhoto = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      Alert.alert('Izin dibutuhkan', 'Izinkan akses galeri agar foto profil dapat diganti.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.85,
+    });
+
+    if (!result.canceled && result.assets[0]?.uri) {
+      setAvatarUri(result.assets[0].uri);
+    }
+  };
+
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.screenContent}>
+    <ScrollView style={styles.screen} contentContainerStyle={[styles.screenContent, styles.profileScreenContent]}>
       <ScreenTopBar title="Profil Mahasiswa" eyebrow="Beranda" />
       <View style={styles.profileHero}>
-        <Image source={{ uri: STUDENT.avatar }} style={styles.profileAvatar} />
+        <View style={styles.profileAvatarColumn}>
+          <View style={styles.profileAvatarWrap}>
+            <Image source={{ uri: avatarUri }} style={styles.profileAvatar} />
+            <Pressable style={styles.profileAvatarButton} onPress={handlePickProfilePhoto}>
+              <Ionicons name="camera" size={16} color={COLORS.surface} />
+            </Pressable>
+          </View>
+          <Pressable style={styles.profilePhotoAction} onPress={handlePickProfilePhoto}>
+            <Text style={styles.profilePhotoActionText}>Ganti foto</Text>
+          </Pressable>
+        </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.profileName}>{STUDENT.name}</Text>
           <Text style={styles.profileMajor}>{STUDENT.major}</Text>
@@ -599,9 +673,20 @@ function AboutCampusScreen() {
   );
 }
 
-function ScreenTopBar({ title, eyebrow }: { title: string; eyebrow?: string }) {
+function ScreenTopBar({
+  title,
+  eyebrow,
+  showBack = false,
+  showAvatar = true,
+}: {
+  title: string;
+  eyebrow?: string;
+  showBack?: boolean;
+  showAvatar?: boolean;
+}) {
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
+  const { avatarUri } = useProfileAvatar();
 
   const openSidebar = () => {
     let current = navigation;
@@ -616,6 +701,12 @@ function ScreenTopBar({ title, eyebrow }: { title: string; eyebrow?: string }) {
     }
   };
 
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
+
   return (
     <View style={[styles.topBar, { paddingTop: insets.top + 4 }]}>
       <Pressable style={styles.topBarButton} onPress={openSidebar}>
@@ -623,9 +714,21 @@ function ScreenTopBar({ title, eyebrow }: { title: string; eyebrow?: string }) {
       </Pressable>
       <View style={styles.topBarCopy}>
         {eyebrow ? <Text style={styles.topBarEyebrow}>{eyebrow}</Text> : null}
-        <Text style={styles.topBarTitle}>{title}</Text>
+        <Text style={styles.topBarTitle} numberOfLines={1}>
+          {title}
+        </Text>
       </View>
-      <Image source={{ uri: STUDENT.avatar }} style={styles.topBarAvatar} />
+      <View style={styles.topBarRight}>
+        {showBack ? (
+          <Pressable style={styles.topBarButton} onPress={handleBackPress}>
+            <Ionicons name="arrow-back" size={22} color={COLORS.primary} />
+          </Pressable>
+        ) : showAvatar ? (
+          <Image source={{ uri: avatarUri }} style={styles.topBarAvatar} />
+        ) : (
+          <View style={styles.topBarSideSpacer} />
+        )}
+      </View>
     </View>
   );
 }
@@ -697,6 +800,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  topBarSideSpacer: {
+    width: 44,
+    height: 44,
+  },
   topBarCopy: {
     flex: 1,
     gap: 2,
@@ -720,6 +827,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 2,
     borderColor: COLORS.surface,
+  },
+  topBarRight: {
+    width: 48,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   hero: {
     backgroundColor: COLORS.primaryContainer,
@@ -1060,10 +1172,17 @@ const styles = StyleSheet.create({
   profileHero: {
     backgroundColor: COLORS.primaryContainer,
     borderRadius: 28,
-    padding: 24,
+    padding: 20,
     flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 14,
+  },
+  profileAvatarColumn: {
     alignItems: 'center',
-    gap: 18,
+    gap: 8,
+  },
+  profileAvatarWrap: {
+    position: 'relative',
   },
   profileAvatar: {
     width: 110,
@@ -1071,6 +1190,30 @@ const styles = StyleSheet.create({
     borderRadius: 55,
     borderWidth: 4,
     borderColor: 'rgba(255,225,109,0.2)',
+  },
+  profileAvatarButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.surface,
+  },
+  profilePhotoAction: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+  },
+  profilePhotoActionText: {
+    color: COLORS.surface,
+    fontSize: 11,
+    fontWeight: '700',
   },
   profileName: {
     color: COLORS.surface,
@@ -1086,11 +1229,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   gpaBadge: {
-    marginTop: 14,
+    marginTop: 10,
     alignSelf: 'flex-start',
     backgroundColor: 'rgba(255,255,255,0.12)',
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 18,
   },
   gpaLabel: {
@@ -1113,16 +1256,20 @@ const styles = StyleSheet.create({
     letterSpacing: 1.6,
     fontWeight: '800',
   },
+  profileScreenContent: {
+    gap: 12,
+    paddingBottom: 104,
+  },
   doubleCardRow: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 10,
   },
   metricCard: {
     flex: 1,
     backgroundColor: COLORS.surfaceLow,
     borderRadius: 22,
-    padding: 18,
-    minHeight: 92,
+    padding: 16,
+    minHeight: 84,
   },
   metricLabel: {
     color: COLORS.textMuted,
